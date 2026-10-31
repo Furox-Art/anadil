@@ -6,6 +6,7 @@ import argparse
 import os
 import sys
 import traceback
+from types import CodeType
 from typing import Sequence
 
 from . import __version__
@@ -75,6 +76,22 @@ def _prepare(path: str, lang: str | None) -> tuple[Locale | None, Translation]:
     return locale, translation
 
 
+def _compile(
+    path: str, locale: Locale | None, translation: Translation
+) -> CodeType | None:
+    try:
+        return compile(translation.python, path, "exec")
+    except SyntaxError as exc:
+        lineno = exc.lineno or 1
+        column = translation.original_column(lineno, exc.offset or 1)
+        prefix = _message(locale, "syntax_error", "Syntax error")
+        print(
+            f"{prefix}: {path}:{lineno}:{column}: {exc.msg}",
+            file=sys.stderr,
+        )
+        return None
+
+
 def _run(namespace: argparse.Namespace) -> int:
     try:
         locale, translation = _prepare(namespace.file, namespace.lang)
@@ -82,16 +99,8 @@ def _run(namespace: argparse.Namespace) -> int:
         print(f"polyglot-python: {exc.message}", file=sys.stderr)
         return 1
 
-    try:
-        code = compile(translation.python, namespace.file, "exec")
-    except SyntaxError as exc:
-        lineno = exc.lineno or 1
-        column = translation.original_column(lineno, exc.offset or 1)
-        prefix = _message(locale, "syntax_error", "Syntax error")
-        print(
-            f"{prefix}: {namespace.file}:{lineno}:{column}: {exc.msg}",
-            file=sys.stderr,
-        )
+    code = _compile(namespace.file, locale, translation)
+    if code is None:
         return 1
 
     scope = {
@@ -119,6 +128,15 @@ def _run(namespace: argparse.Namespace) -> int:
     finally:
         sys.argv = saved_argv
     return 0
+
+
+def _check(namespace: argparse.Namespace) -> int:
+    try:
+        locale, translation = _prepare(namespace.file, namespace.lang)
+    except _Failure as exc:
+        print(f"polyglot-python: {exc.message}", file=sys.stderr)
+        return 1
+    return 0 if _compile(namespace.file, locale, translation) is not None else 1
 
 
 def _translate(namespace: argparse.Namespace) -> int:
@@ -182,6 +200,13 @@ def build_parser() -> argparse.ArgumentParser:
         "-o", "--output", metavar="PATH", help="write the translation to PATH"
     )
     transform.set_defaults(handler=_translate)
+
+    check = subparsers.add_parser(
+        "check", help="translate and compile a program without running it"
+    )
+    check.add_argument("file", help="localized source file")
+    check.add_argument("--lang", metavar="CODE", help="locale code, e.g. tr")
+    check.set_defaults(handler=_check)
 
     listing = subparsers.add_parser("locales", help="list bundled locales")
     listing.set_defaults(handler=_locales)

@@ -41,6 +41,7 @@ için n içinde range(1, 16):
 
 ```bash
 polyglot-python run examples/classify.tr
+polyglot-python check examples/classify.tr
 polyglot-python translate examples/classify.tr
 polyglot-python translate examples/classify.tr -o classify.py
 ```
@@ -59,6 +60,7 @@ The same FizzBuzz program is included for every locale under `examples/`.
 | zh   | 中文        | `如果`   | `函数`      | `返回`    |
 | hi   | हिन्दी      | `अगर`    | `फलन`       | `लौटाओ`   |
 | ar   | العربية    | `إذا`    | `دالة`      | `إرجاع`   |
+| ru   | Русский    | `если`   | `определить`| `вернуть` |
 
 `polyglot-python locales` prints the full list. Every locale defines exactly the 35
 Python hard keywords (`keyword.kwlist`); soft keywords such as `match`, `case`
@@ -68,12 +70,13 @@ Locale selection order:
 
 1. `--lang CODE`
 2. first line directive: `# polyglot-python: tr`
-3. file suffix: `.tr`, `.es`, `.pt`, `.de`, `.fr`, `.zh`, `.hi`, `.ar`
+3. file suffix: `.tr`, `.es`, `.pt`, `.de`, `.fr`, `.zh`, `.hi`, `.ar`, `.ru`
 
 ## CLI
 
 ```text
 polyglot-python run FILE [--lang CODE] [args...]
+polyglot-python check FILE [--lang CODE]
 polyglot-python translate FILE [--lang CODE] [-o OUT]
 polyglot-python locales
 polyglot-python --version
@@ -90,6 +93,8 @@ program as `sys.argv[1:]`.
   reported error positions back to the localized source.
 - `translate -o` and stdout output are UTF-8 with LF line endings on every
   platform, so exports are byte-identical and re-verifiable.
+- `check` translates and compiles without executing the program, so localized
+  sources can be validated safely.
 - A localized keyword after a dot is treated as an attribute name and never
   rewritten.
 - Localized keywords are reserved words in their locale.
@@ -105,7 +110,7 @@ program as `sys.argv[1:]`.
   `range`, ...), the standard library, or English exception text.
 - This is not a natural-language compiler. It does not understand Spanish or
   Turkish prose; it understands Python syntax written with localized keywords.
-- The local prototype ships 8 locales. Other languages can be added by editing
+- The local prototype ships 9 locales. Other languages can be added by editing
   `src/polyglot_python/locales.json`; malformed tables are rejected at load time.
 - Tested on CPython 3.12 on Windows; the code targets 3.12+.
 
@@ -117,8 +122,8 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 75 tests with 100% statement coverage, including an
-end-to-end execution of the same program in all 8 locales and byte-level
+The suite contains 89 tests with 100% statement coverage, including an
+end-to-end execution of the same program in all 9 locales and byte-level
 determinism checks. CI runs Ubuntu 3.12-3.13 plus Windows and macOS at 3.12,
 enforces the 100% coverage gate on Linux 3.12, and translates every example
 twice on all three operating systems to compare bytes and line counts.

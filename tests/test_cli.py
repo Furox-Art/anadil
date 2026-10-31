@@ -80,6 +80,27 @@ def test_missing_file(capsys):
     assert "cannot read" in capsys.readouterr().err
 
 
+def test_check_valid_program_does_not_execute(tmp_path, capsys):
+    path = _write(tmp_path, "ok.tr", 'print("ran")\n')
+    assert main(["check", str(path)]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_check_syntax_error_is_localized(tmp_path, capsys):
+    path = _write(tmp_path, "broken.tr", "eğer Doğru\n    geç\n")
+    assert main(["check", str(path)]) == 1
+    error = capsys.readouterr().err
+    assert "Sözdizimi hatası" in error
+    assert "broken.tr:1:" in error
+
+
+def test_check_missing_file(capsys):
+    assert main(["check", "does-not-exist.tr"]) == 1
+    assert "cannot read" in capsys.readouterr().err
+
+
 def test_translate_to_stdout(tmp_path, capsys):
     path = _write(tmp_path, "program.tr", TR_PROGRAM)
     assert main(["translate", "--lang", "tr", str(path)]) == 0
@@ -106,7 +127,7 @@ def test_translate_to_file(tmp_path):
 def test_locales_lists_all_codes(capsys):
     assert main(["locales"]) == 0
     output = capsys.readouterr().out
-    for code in ("tr", "es", "pt", "de", "fr", "zh", "hi", "ar"):
+    for code in ("tr", "es", "pt", "de", "fr", "zh", "hi", "ar", "ru"):
         assert code in output
 
 
