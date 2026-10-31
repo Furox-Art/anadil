@@ -1,4 +1,4 @@
-"""Command line interface for anadil."""
+"""Command line interface for polyglot-python."""
 
 from __future__ import annotations
 
@@ -79,7 +79,7 @@ def _run(namespace: argparse.Namespace) -> int:
     try:
         locale, translation = _prepare(namespace.file, namespace.lang)
     except _Failure as exc:
-        print(f"anadil: {exc.message}", file=sys.stderr)
+        print(f"polyglot-python: {exc.message}", file=sys.stderr)
         return 1
 
     try:
@@ -125,7 +125,7 @@ def _translate(namespace: argparse.Namespace) -> int:
     try:
         _, translation = _prepare(namespace.file, namespace.lang)
     except _Failure as exc:
-        print(f"anadil: {exc.message}", file=sys.stderr)
+        print(f"polyglot-python: {exc.message}", file=sys.stderr)
         return 1
 
     if namespace.output:
@@ -135,7 +135,7 @@ def _translate(namespace: argparse.Namespace) -> int:
         except OSError as exc:
             reason = exc.strerror or str(exc)
             print(
-                f"anadil: cannot write {namespace.output}: {reason}",
+                f"polyglot-python: cannot write {namespace.output}: {reason}",
                 file=sys.stderr,
             )
             return 1
@@ -155,11 +155,11 @@ def _locales(_namespace: argparse.Namespace) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="anadil",
+        prog="polyglot-python",
         description="Write Python in your own language: deterministic keyword translation.",
     )
     parser.add_argument(
-        "--version", action="version", version=f"anadil {__version__}"
+        "--version", action="version", version=f"polyglot-python {__version__}"
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 

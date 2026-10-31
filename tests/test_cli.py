@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from anadil.cli import _configure_console, main
+from polyglot_python.cli import _configure_console, main
 
 TR_PROGRAM = (
     "fonksiyon topla(a, b):\n"
@@ -35,7 +35,7 @@ def test_run_explicit_lang_before_file(tmp_path, capsys):
 
 
 def test_run_reads_directive(tmp_path, capsys):
-    path = _write(tmp_path, "program.txt", "# anadil: tr\n" + TR_PROGRAM)
+    path = _write(tmp_path, "program.txt", "# polyglot-python: tr\n" + TR_PROGRAM)
     assert main(["run", str(path)]) == 0
     assert capsys.readouterr().out.strip() == "5"
 
@@ -114,7 +114,7 @@ def test_version(capsys):
     with pytest.raises(SystemExit) as caught:
         main(["--version"])
     assert caught.value.code == 0
-    assert "anadil 0.1.0" in capsys.readouterr().out
+    assert "polyglot-python 0.1.0" in capsys.readouterr().out
 
 
 def test_run_token_error_is_localized(tmp_path, capsys):
@@ -162,7 +162,7 @@ def test_module_entrypoint():
     env["PYTHONPATH"] = str(root / "src")
     env["PYTHONIOENCODING"] = "utf-8"
     result = subprocess.run(
-        [sys.executable, "-m", "anadil", "locales"],
+        [sys.executable, "-m", "polyglot_python", "locales"],
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -206,16 +206,16 @@ def test_configure_console_handles_streams(monkeypatch):
 
 
 def test_cli_module_guard(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "argv", ["anadil", "locales"])
+    monkeypatch.setattr(sys, "argv", ["polyglot-python", "locales"])
     with pytest.warns(RuntimeWarning):
         with pytest.raises(SystemExit) as caught:
-            runpy.run_module("anadil.cli", run_name="__main__")
+            runpy.run_module("polyglot_python.cli", run_name="__main__")
     assert caught.value.code == 0
 
 
 def test_package_module_guard(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "argv", ["anadil", "locales"])
+    monkeypatch.setattr(sys, "argv", ["polyglot-python", "locales"])
     with pytest.raises(SystemExit) as caught:
-        runpy.run_module("anadil", run_name="__main__")
+        runpy.run_module("polyglot_python", run_name="__main__")
     assert caught.value.code == 0
     assert "tr" in capsys.readouterr().out

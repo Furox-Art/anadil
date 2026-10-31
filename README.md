@@ -1,9 +1,9 @@
-# anadil
+# polyglot-python
 
 Write Python in your own language, deterministically.
 
-anadil is a keyword transpiler for Python. You keep Python's grammar and write
-programs with localized keywords; anadil maps those keywords to the real Python
+polyglot-python is a keyword transpiler for Python. You keep Python's grammar and write
+programs with localized keywords; polyglot-python maps those keywords to the real Python
 keywords and hands the result to CPython. No AI, no network, no randomness:
 the same source, locale and version always produce byte-identical Python.
 
@@ -40,9 +40,9 @@ için n içinde range(1, 16):
 ```
 
 ```bash
-anadil run examples/classify.tr
-anadil translate examples/classify.tr
-anadil translate examples/classify.tr -o classify.py
+polyglot-python run examples/classify.tr
+polyglot-python translate examples/classify.tr
+polyglot-python translate examples/classify.tr -o classify.py
 ```
 
 The same FizzBuzz program is included for every locale under `examples/`.
@@ -60,23 +60,23 @@ The same FizzBuzz program is included for every locale under `examples/`.
 | hi   | हिन्दी      | `अगर`    | `फलन`       | `लौटाओ`   |
 | ar   | العربية    | `إذا`    | `دالة`      | `إرجاع`   |
 
-`anadil locales` prints the full list. Every locale defines exactly the 35
+`polyglot-python locales` prints the full list. Every locale defines exactly the 35
 Python hard keywords (`keyword.kwlist`); soft keywords such as `match`, `case`
 and `type` stay English.
 
 Locale selection order:
 
 1. `--lang CODE`
-2. first line directive: `# anadil: tr`
+2. first line directive: `# polyglot-python: tr`
 3. file suffix: `.tr`, `.es`, `.pt`, `.de`, `.fr`, `.zh`, `.hi`, `.ar`
 
 ## CLI
 
 ```text
-anadil run FILE [--lang CODE] [args...]
-anadil translate FILE [--lang CODE] [-o OUT]
-anadil locales
-anadil --version
+polyglot-python run FILE [--lang CODE] [args...]
+polyglot-python translate FILE [--lang CODE] [-o OUT]
+polyglot-python locales
+polyglot-python --version
 ```
 
 For `run`, place options before `FILE`; everything after `FILE` is passed to the
@@ -106,7 +106,7 @@ program as `sys.argv[1:]`.
 - This is not a natural-language compiler. It does not understand Spanish or
   Turkish prose; it understands Python syntax written with localized keywords.
 - The local prototype ships 8 locales. Other languages can be added by editing
-  `src/anadil/locales.json`; malformed tables are rejected at load time.
+  `src/polyglot_python/locales.json`; malformed tables are rejected at load time.
 - Tested on CPython 3.12 on Windows; the code targets 3.12+.
 
 ## Development
@@ -114,7 +114,7 @@ program as `sys.argv[1:]`.
 ```bash
 python -m venv .venv
 .venv/Scripts/pip install -e ".[dev]"
-.venv/Scripts/python -m pytest -q --cov=anadil --cov-fail-under=100
+.venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
 The suite contains 75 tests with 100% statement coverage, including an

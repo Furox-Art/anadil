@@ -36,7 +36,7 @@ jobs:
           if [ "$RUNNER_OS" = "Linux" ] && [ "${{ matrix.python }}" = "3.12" ]; then
             gate="--cov-fail-under=100"
           fi
-          python -m pytest -q --cov=anadil $gate
+          python -m pytest -q --cov=polyglot_python $gate
 
   determinism:
     name: determinism ${{ matrix.os }}
@@ -61,7 +61,7 @@ jobs:
           import sys
 
           for source in sorted(pathlib.Path("examples").glob("classify.*")):
-              command = [sys.executable, "-m", "anadil", "translate", str(source)]
+              command = [sys.executable, "-m", "polyglot_python", "translate", str(source)]
               first = subprocess.run(command, capture_output=True, check=True).stdout
               second = subprocess.run(command, capture_output=True, check=True).stdout
               assert first == second, f"nondeterministic: {source}"

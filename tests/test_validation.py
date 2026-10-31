@@ -2,7 +2,7 @@ import keyword
 
 import pytest
 
-from anadil.translator import (
+from polyglot_python.translator import (
     LocaleError,
     _parse_locales,
     _tokenizes_as_name,
@@ -106,7 +106,7 @@ def test_keyword_must_tokenize_as_single_name(monkeypatch):
     table = _valid_keywords()
     table["if"] = "eğer"
     monkeypatch.setattr(
-        "anadil.translator._tokenizes_as_name", lambda word: False
+        "polyglot_python.translator._tokenizes_as_name", lambda word: False
     )
     with pytest.raises(LocaleError):
         _validate_keywords("xx", table)
