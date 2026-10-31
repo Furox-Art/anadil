@@ -98,7 +98,7 @@ jobs:
           /tmp/wheel-venv/bin/python -m pip install dist/*.whl
       - name: Smoke test the installed wheel
         run: |
-          /tmp/wheel-venv/bin/polyglot-python check examples/classify.ru
+          /tmp/wheel-venv/bin/polyglot-python check examples
           /tmp/wheel-venv/bin/polyglot-python run examples/classify.tr | tail -n 1 | grep -qx FizzBuzz
 
   npm:
@@ -120,7 +120,7 @@ jobs:
         run: |
           version=$(node -p "require('./npm/package.json').version")
           node npm/bin/polyglot-python.js --version | grep -qx "polyglot-python $version"
-          node npm/bin/polyglot-python.js check examples/classify.ru
+          node npm/bin/polyglot-python.js check examples
           node npm/bin/polyglot-python.js run examples/classify.tr | tail -n 1 | grep -qx FizzBuzz
       - name: Check npm package contents
         working-directory: npm

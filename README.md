@@ -167,8 +167,9 @@ example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.15 plus Windows and macOS
 at 3.12, enforces the 100% coverage gate on Linux 3.12, translates every
 example twice on all three operating systems to compare bytes and line counts,
-builds the wheel, installs it into a clean environment, and smoke-tests it,
-and runs the npm wrapper against the installed Python package. Dependabot keeps
+builds the wheel, installs it into a clean environment, checks every example
+with it and runs one end to end, and runs the npm wrapper against the installed
+Python package. Dependabot keeps
 GitHub Actions and development dependencies current. Separate release workflows
 publish tagged GitHub Releases to PyPI and npm through Trusted Publishing.
 
