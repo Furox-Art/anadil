@@ -14,6 +14,8 @@ All notable changes to this project are documented here. The format follows
 - A broader `examples/tour.<code>` program per locale that exercises all 35
   keywords (classes, exceptions, generators, closures, `with`,
   `async`/`await`) and is verified to translate back to a reference program.
+- `polyglot-python keywords CODE` prints a locale's complete
+  Python-to-localized keyword table.
 
 ## [0.2.1] - 2026-11-01
 
