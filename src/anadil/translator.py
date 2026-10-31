@@ -98,6 +98,23 @@ class Translation:
         return column_map[position] + 1
 
 
+def _tokenizes_as_name(word: str) -> bool:
+    try:
+        tokens = list(tokenize.generate_tokens(io.StringIO(word).readline))
+    except (tokenize.TokenError, IndentationError):
+        return False
+    significant = [
+        token
+        for token in tokens
+        if token.type not in (tokenize.ENDMARKER, tokenize.NEWLINE, tokenize.NL)
+    ]
+    return (
+        len(significant) == 1
+        and significant[0].type == tokenize.NAME
+        and significant[0].string == word
+    )
+
+
 def _validate_keywords(code: str, raw: object) -> Mapping[str, str]:
     if not isinstance(raw, dict):
         raise LocaleError(f"{code}: keywords must be a JSON object")
@@ -125,6 +142,12 @@ def _validate_keywords(code: str, raw: object) -> Mapping[str, str]:
             raise LocaleError(
                 f"{code}: duplicate localized keyword {local!r} "
                 f"for {seen[local]!r} and {python_word!r}"
+            )
+        if not _tokenizes_as_name(local):
+            raise LocaleError(
+                f"{code}: {python_word!r} maps to {local!r}, which this "
+                "interpreter does not tokenize as one identifier "
+                "(Python 3.12+ is required for Indic scripts)"
             )
         seen[local] = python_word
     return MappingProxyType(dict(raw))
