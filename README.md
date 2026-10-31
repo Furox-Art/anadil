@@ -16,7 +16,9 @@ syntax with your words.
 pip install -e .
 ```
 
-Requires Python 3.10+ (CPython 3.12 recommended). No runtime dependencies.
+Requires Python 3.12+. Python 3.10/3.11 are not supported because their
+tokenizer splits Indic combining marks, so several Hindi keywords would not
+translate. No runtime dependencies.
 
 ## Quick start
 
@@ -105,19 +107,21 @@ program as `sys.argv[1:]`.
   Turkish prose; it understands Python syntax written with localized keywords.
 - The local prototype ships 8 locales. Other languages can be added by editing
   `src/anadil/locales.json`; malformed tables are rejected at load time.
-- Tested on CPython 3.12 on Windows; the code targets 3.10+.
+- Tested on CPython 3.12 on Windows; the code targets 3.12+.
 
 ## Development
 
 ```bash
 python -m venv .venv
-.venv/Scripts/pip install -e . pytest pytest-cov
-.venv/Scripts/python -m pytest -q --cov=anadil
+.venv/Scripts/pip install -e ".[dev]"
+.venv/Scripts/python -m pytest -q --cov=anadil --cov-fail-under=100
 ```
 
-The suite contains 72 tests with 100% statement coverage, including an
+The suite contains 75 tests with 100% statement coverage, including an
 end-to-end execution of the same program in all 8 locales and byte-level
-determinism checks.
+determinism checks. CI runs Ubuntu 3.12-3.13 plus Windows and macOS at 3.12,
+enforces the 100% coverage gate on Linux 3.12, and translates every example
+twice on all three operating systems to compare bytes and line counts.
 
 ## License
 

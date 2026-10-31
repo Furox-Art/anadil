@@ -5,6 +5,7 @@ import pytest
 from anadil.translator import (
     LocaleError,
     _parse_locales,
+    _tokenizes_as_name,
     _validate_keywords,
     _validate_messages,
 )
@@ -90,3 +91,22 @@ def test_locale_entry_must_be_object():
 def test_locale_entry_needs_name():
     with pytest.raises(LocaleError):
         _parse_locales('{"locales": {"tr": {"keywords": {}, "messages": {}}}}')
+
+
+def test_tokenizes_as_name_accepts_localized_keyword():
+    assert _tokenizes_as_name("eğer") is True
+
+
+def test_tokenizes_as_name_rejects_other_input():
+    assert _tokenizes_as_name("iki kelime") is False
+    assert _tokenizes_as_name('"""') is False
+
+
+def test_keyword_must_tokenize_as_single_name(monkeypatch):
+    table = _valid_keywords()
+    table["if"] = "eğer"
+    monkeypatch.setattr(
+        "anadil.translator._tokenizes_as_name", lambda word: False
+    )
+    with pytest.raises(LocaleError):
+        _validate_keywords("xx", table)
