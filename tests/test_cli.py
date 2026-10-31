@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+import polyglot_python
+
 from polyglot_python.cli import _configure_console, main
 
 TR_PROGRAM = (
@@ -135,7 +137,7 @@ def test_version(capsys):
     with pytest.raises(SystemExit) as caught:
         main(["--version"])
     assert caught.value.code == 0
-    assert "polyglot-python 0.2.0" in capsys.readouterr().out
+    assert f"polyglot-python {polyglot_python.__version__}" in capsys.readouterr().out
 
 
 def test_run_token_error_is_localized(tmp_path, capsys):
