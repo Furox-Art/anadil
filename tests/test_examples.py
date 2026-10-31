@@ -34,6 +34,12 @@ def test_examples_are_present():
         ".hi",
         ".ar",
         ".ru",
+        ".it",
+        ".nl",
+        ".pl",
+        ".id",
+        ".vi",
+        ".ja",
     }
 
 

@@ -69,6 +69,12 @@ The same FizzBuzz program is included for every locale under `examples/`.
 | hi   | हिन्दी      | `अगर`    | `फलन`       | `लौटाओ`   |
 | ar   | العربية    | `إذا`    | `دالة`      | `إرجاع`   |
 | ru   | Русский    | `если`   | `определить`| `вернуть` |
+| it   | Italiano   | `se`     | `funzione`  | `restituisci` |
+| nl   | Nederlands | `indien` | `functie`   | `retourneer` |
+| pl   | Polski     | `jeśli`  | `funkcja`   | `zwróć`   |
+| id   | Bahasa Indonesia | `jika` | `fungsi` | `kembalikan` |
+| vi   | Tiếng Việt | `nếu`    | `hàm`       | `trả_về`  |
+| ja   | 日本語      | `もし`   | `関数`      | `返す`    |
 
 `polyglot-python locales` prints the full list. Every locale defines exactly the 35
 Python hard keywords (`keyword.kwlist`); soft keywords such as `match`, `case`
@@ -78,7 +84,8 @@ Locale selection order:
 
 1. `--lang CODE`
 2. first line directive: `# polyglot-python: tr`
-3. file suffix: `.tr`, `.es`, `.pt`, `.de`, `.fr`, `.zh`, `.hi`, `.ar`, `.ru`
+3. file suffix: `.tr`, `.es`, `.pt`, `.de`, `.fr`, `.zh`, `.hi`, `.ar`, `.ru`,
+   `.it`, `.nl`, `.pl`, `.id`, `.vi`, `.ja`
 
 ## CLI
 
@@ -118,7 +125,7 @@ program as `sys.argv[1:]`.
   `range`, ...), the standard library, or English exception text.
 - This is not a natural-language compiler. It does not understand Spanish or
   Turkish prose; it understands Python syntax written with localized keywords.
-- The local prototype ships 9 locales. Other languages can be added by editing
+- The local prototype ships 15 locales. Other languages can be added by editing
   `src/polyglot_python/locales.json`; malformed tables are rejected at load time.
 - Tested on CPython 3.12 on Windows; CI covers 3.12-3.14 on Linux and 3.12
   on Windows and macOS. The code targets 3.12+.
@@ -131,8 +138,8 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 120 tests with 100% statement coverage, including every
-keyword in both directions for all 9 locales, end-to-end CLI runs of every
+The suite contains 156 tests with 100% statement coverage, including every
+keyword in both directions for all 15 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS
 at 3.12, enforces the 100% coverage gate on Linux 3.12, translates every
