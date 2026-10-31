@@ -83,6 +83,11 @@ polyglot-python run examples/tour.tr
 | id   | Bahasa Indonesia | `jika` | `fungsi` | `kembalikan` |
 | vi   | Tiếng Việt | `nếu`    | `hàm`       | `trả_về`  |
 | ja   | 日本語      | `もし`   | `関数`      | `返す`    |
+| ko   | 한국어      | `만약`   | `함수`      | `반환`    |
+| uk   | Українська | `якщо`  | `функція`   | `повернути` |
+| ro   | Română     | `dacă`  | `funcție`   | `returnează` |
+| sv   | Svenska    | `om`    | `funktion`  | `returnera` |
+| el   | Ελληνικά   | `αν`    | `συνάρτηση` | `επιστροφή` |
 
 `polyglot-python locales` prints the full list, and `polyglot-python keywords tr`
 prints one locale's complete Python-to-localized mapping. Every locale defines
@@ -94,7 +99,7 @@ Locale selection order:
 1. `--lang CODE`
 2. first line directive: `# polyglot-python: tr`
 3. file suffix: `.tr`, `.es`, `.pt`, `.de`, `.fr`, `.zh`, `.hi`, `.ar`, `.ru`,
-   `.it`, `.nl`, `.pl`, `.id`, `.vi`, `.ja`
+   `.it`, `.nl`, `.pl`, `.id`, `.vi`, `.ja`, `.ko`, `.uk`, `.ro`, `.sv`, `.el`
 
 ## CLI
 
@@ -135,7 +140,7 @@ program as `sys.argv[1:]`.
   `range`, ...), the standard library, or English exception text.
 - This is not a natural-language compiler. It does not understand Spanish or
   Turkish prose; it understands Python syntax written with localized keywords.
-- The local prototype ships 15 locales. Other languages can be added by editing
+- The local prototype ships 20 locales. Other languages can be added by editing
   `src/polyglot_python/locales.json`; malformed tables are rejected at load time.
 - Tested on CPython 3.12 on Windows; CI covers 3.12-3.14 on Linux and 3.12
   on Windows and macOS. The code targets 3.12+.
@@ -148,8 +153,8 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 189 tests with 100% statement coverage, including every
-keyword in both directions for all 15 locales, end-to-end CLI runs of every
+The suite contains 229 tests with 100% statement coverage, including every
+keyword in both directions for all 20 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS
 at 3.12, enforces the 100% coverage gate on Linux 3.12, translates every

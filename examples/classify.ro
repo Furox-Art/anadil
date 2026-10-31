@@ -1,0 +1,12 @@
+funcție classify(n):
+    dacă n % 15 == 0:
+        returnează "FizzBuzz"
+    altfel_dacă n % 3 == 0:
+        returnează "Fizz"
+    altfel_dacă n % 5 == 0:
+        returnează "Buzz"
+    altfel:
+        returnează str(n)
+
+pentru n în range(1, 16):
+    print(classify(n))

@@ -1,0 +1,115 @@
+імпорт asyncio
+імпорт math як m
+з collections імпорт Counter
+
+LIMIT = 30
+registry = {}
+
+
+функція fib(limit):
+    a, b = 0, 1
+    values = []
+    поки Істина:
+        якщо a >= limit:
+            перервати
+        values.append(a)
+        a, b = b, a + b
+    повернути values
+
+
+функція evens(numbers):
+    для number в numbers:
+        якщо number % 2:
+            продовжити
+        генерувати number
+
+
+функція must_be_positive(value):
+    якщо value <= 0:
+        підняти ValueError("not positive")
+    повернути value
+
+
+функція safe_div(a, b):
+    спробувати:
+        стверджувати b != 0
+        повернути a / b
+    виняток AssertionError:
+        повернути Ніщо
+    нарешті:
+        пропустити
+
+
+клас Accumulator:
+    функція __init__(self):
+        self.total = 0
+
+    функція add(self, amount):
+        self.total += amount
+
+    функція get(self):
+        повернути self.total
+
+
+клас Section:
+    функція __enter__(self):
+        повернути self
+
+    функція __exit__(self, exc_type, exc, traceback):
+        повернути Хибність
+
+
+функція register(name):
+    глобальний registry
+    registry[name] = Істина
+
+
+функція outer():
+    count = 0
+
+    функція inner():
+        нелокальний count
+        count += 1
+        повернути count
+
+    повернути inner
+
+
+асинхронний функція report(value):
+    чекати asyncio.sleep(0)
+    якщо value це Ніщо або не value:
+        повернути "empty"
+    інакше_якщо value > 10 і value % 2 == 0:
+        повернути "big even"
+    інакше:
+        повернути "other"
+
+
+функція main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    із Section():
+        для value в evens(values):
+            acc.add(value)
+    double = лямбда x: x * 2
+    squares = [double(v) для v в values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    видалити registry["fib"]
+    print("clean", "fib" не в registry)
+
+
+якщо Істина:
+    main()

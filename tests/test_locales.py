@@ -20,6 +20,11 @@ EXPECTED_CODES = {
     "id",
     "vi",
     "ja",
+    "ko",
+    "uk",
+    "ro",
+    "sv",
+    "el",
 }
 
 
@@ -67,6 +72,11 @@ def test_reverse_keywords_roundtrip():
         ("id", "return", "kembalikan"),
         ("vi", "import", "nhập"),
         ("ja", "class", "クラス"),
+        ("ko", "if", "만약"),
+        ("uk", "while", "поки"),
+        ("ro", "return", "returnează"),
+        ("sv", "class", "klass"),
+        ("el", "import", "εισαγωγή"),
     ],
 )
 def test_known_mappings(code, python_word, local_word):

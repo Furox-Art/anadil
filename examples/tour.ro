@@ -1,0 +1,115 @@
+importă asyncio
+importă math ca m
+din collections importă Counter
+
+LIMIT = 30
+registry = {}
+
+
+funcție fib(limit):
+    a, b = 0, 1
+    values = []
+    cât_timp Adevărat:
+        dacă a >= limit:
+            întrerupe
+        values.append(a)
+        a, b = b, a + b
+    returnează values
+
+
+funcție evens(numbers):
+    pentru number în numbers:
+        dacă number % 2:
+            continuă
+        generează number
+
+
+funcție must_be_positive(value):
+    dacă value <= 0:
+        ridică ValueError("not positive")
+    returnează value
+
+
+funcție safe_div(a, b):
+    încearcă:
+        afirmă b != 0
+        returnează a / b
+    excepție AssertionError:
+        returnează Nimic
+    în_final:
+        treci
+
+
+clasă Accumulator:
+    funcție __init__(self):
+        self.total = 0
+
+    funcție add(self, amount):
+        self.total += amount
+
+    funcție get(self):
+        returnează self.total
+
+
+clasă Section:
+    funcție __enter__(self):
+        returnează self
+
+    funcție __exit__(self, exc_type, exc, traceback):
+        returnează Fals
+
+
+funcție register(name):
+    global registry
+    registry[name] = Adevărat
+
+
+funcție outer():
+    count = 0
+
+    funcție inner():
+        nelocal count
+        count += 1
+        returnează count
+
+    returnează inner
+
+
+asincron funcție report(value):
+    așteaptă asyncio.sleep(0)
+    dacă value este Nimic sau nu value:
+        returnează "empty"
+    altfel_dacă value > 10 și value % 2 == 0:
+        returnează "big even"
+    altfel:
+        returnează "other"
+
+
+funcție main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    cu Section():
+        pentru value în evens(values):
+            acc.add(value)
+    double = lambda x: x * 2
+    squares = [double(v) pentru v în values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    șterge registry["fib"]
+    print("clean", "fib" nu în registry)
+
+
+dacă Adevărat:
+    main()
