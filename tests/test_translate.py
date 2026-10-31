@@ -103,3 +103,18 @@ def test_every_locale_executes(code):
     with redirect_stdout(output):
         exec(compile(first.python, "<memory>", "exec"), {})
     assert output.getvalue().strip() == "artı"
+
+
+@pytest.mark.parametrize("code", sorted(LOCALES))
+def test_every_keyword_translates_both_directions(code):
+    locale = LOCALES[code]
+    for python_word, local_word in locale.keywords.items():
+        assert translate(f"{local_word}\n", locale).python == f"{python_word}\n"
+        assert translate(f"{python_word}\n", locale).python == f"{python_word}\n"
+
+
+@pytest.mark.parametrize("code", sorted(LOCALES))
+def test_attribute_names_untouched_in_every_locale(code):
+    locale = LOCALES[code]
+    source = f"value.{locale.keywords['if']} = 1\n"
+    assert translate(source, locale).python == source
