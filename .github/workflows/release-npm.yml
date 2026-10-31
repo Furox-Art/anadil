@@ -1,0 +1,53 @@
+name: Release npm
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: publish to npm
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Use npm with Trusted Publishing support
+        run: npm install --global npm@11.15.0
+      - name: Verify versions and tag
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+          import tomllib
+
+          metadata = tomllib.loads(
+              pathlib.Path("pyproject.toml").read_text(encoding="utf-8")
+          )
+          version = metadata["project"]["version"]
+          package = json.loads(
+              pathlib.Path("npm/package.json").read_text(encoding="utf-8")
+          )
+          assert package["name"] == "polyglot-python"
+          assert package["version"] == version, (
+              f"version drift: pyproject {version} vs npm {package['version']}"
+          )
+          if os.environ["GITHUB_EVENT_NAME"] == "release":
+              tag = os.environ["GITHUB_REF_NAME"]
+              assert tag == f"v{version}", f"release tag {tag!r} does not match v{version}"
+          print(f"npm version {package['version']} matches the Python package")
+          PY
+      - name: Publish to npm
+        working-directory: npm
+        run: npm publish --provenance --access public

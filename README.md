@@ -139,30 +139,25 @@ at 3.12, enforces the 100% coverage gate on Linux 3.12, translates every
 example twice on all three operating systems to compare bytes and line counts,
 builds the wheel, installs it into a clean environment, and smoke-tests it,
 and runs the npm wrapper against the installed Python package. Dependabot keeps
-GitHub Actions and development dependencies current. A separate release
-workflow publishes tagged GitHub Releases to PyPI through Trusted Publishing.
+GitHub Actions and development dependencies current. Separate release workflows
+publish tagged GitHub Releases to PyPI and npm through Trusted Publishing.
 
 ## Releasing
 
-Publishing uses [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
-and stores no API token.
+Publishing uses Trusted Publishing for both registries and stores no API token.
 
-1. On PyPI, add a pending publisher for project `polyglot-python`: owner
-   `Furox-Art`, repository `polyglot-python`, workflow `release.yml`,
-   environment `pypi`.
-2. Change `version` in `pyproject.toml` and
-   `src/polyglot_python/__init__.py` together; the test suite rejects drift.
-3. Publish a GitHub Release with tag `v<version>`. The release workflow verifies
-   the tag, builds the sdist and wheel, and uploads them to PyPI.
-
-The npm wrapper in `npm/` carries the same version, and the test suite rejects
-drift. Publishing it needs an authenticated npm session; the first publish
-creates the package:
-
-```bash
-cd npm
-npm publish
-```
+1. Configure the trusted publishers once:
+   - PyPI: publisher for project `polyglot-python`: owner `Furox-Art`,
+     repository `polyglot-python`, workflow `release.yml`, environment `pypi`.
+   - npm: trusted publisher for package `polyglot-python`: owner `Furox-Art`,
+     repository `polyglot-python`, workflow `release-npm.yml`, environment
+     `npm`.
+2. Change `version` in `pyproject.toml`,
+   `src/polyglot_python/__init__.py` and `npm/package.json` together; the test
+   suite rejects drift.
+3. Publish a GitHub Release with tag `v<version>`. `release.yml` verifies the
+   tag, builds the sdist and wheel, and uploads them to PyPI; `release-npm.yml`
+   verifies the same version and publishes `npm/` to npm with provenance.
 
 ## License
 
