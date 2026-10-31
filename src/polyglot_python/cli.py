@@ -7,6 +7,7 @@ import keyword
 import os
 import sys
 import traceback
+import types
 from types import CodeType
 from typing import Mapping, Sequence
 
@@ -25,6 +26,9 @@ class _Failure(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
         self.message = message
+
+
+_MISSING = object()
 
 
 def _configure_console() -> None:
@@ -108,14 +112,17 @@ def _run(namespace: argparse.Namespace) -> int:
     if code is None:
         return 1
 
-    scope = {
-        "__name__": "__main__",
-        "__file__": os.path.abspath(namespace.file),
-    }
+    module = types.ModuleType("__main__")
+    module.__file__ = os.path.abspath(namespace.file)
+    script_dir = os.path.dirname(module.__file__)
+    saved_main = sys.modules.get("__main__", _MISSING)
+    saved_path = list(sys.path)
     saved_argv = sys.argv
+    sys.modules["__main__"] = module
+    sys.path.insert(0, script_dir)
     sys.argv = [namespace.file, *namespace.args]
     try:
-        exec(code, scope)
+        exec(code, module.__dict__)
     except SystemExit as exc:
         if exc.code is None:
             return 0
@@ -132,6 +139,11 @@ def _run(namespace: argparse.Namespace) -> int:
         return 1
     finally:
         sys.argv = saved_argv
+        sys.path[:] = saved_path
+        if saved_main is _MISSING:
+            sys.modules.pop("__main__", None)
+        else:
+            sys.modules["__main__"] = saved_main
     return 0
 
 

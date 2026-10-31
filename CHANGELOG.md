@@ -19,6 +19,12 @@ All notable changes to this project are documented here. The format follows
 - Five locales: Korean (`ko`), Ukrainian (`uk`), Romanian (`ro`), Swedish (`sv`)
   and Greek (`el`), each with `classify` and `tour` example programs.
 
+### Fixed
+
+- `run` now executes a program the way `python FILE` does: the script's
+  directory leads `sys.path`, so sibling imports work, and the program is
+  registered as the `__main__` module.
+
 ## [0.2.1] - 2026-11-01
 
 ### Added
