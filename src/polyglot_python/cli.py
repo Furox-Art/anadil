@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import keyword
 import os
 import sys
 import traceback
 from types import CodeType
-from typing import Sequence
+from typing import Mapping, Sequence
 
 from . import __version__
 from .translator import (
@@ -56,16 +57,20 @@ def _read_source(path: str) -> str:
         raise _Failure(f"cannot read {path}: {reason}") from exc
 
 
+def _find_locale(locales: Mapping[str, Locale], code: str) -> Locale:
+    locale = locales.get(code)
+    if locale is None:
+        available = ", ".join(sorted(locales))
+        raise _Failure(f"unknown locale {code!r}; available: {available}")
+    return locale
+
+
 def _prepare(path: str, lang: str | None) -> tuple[Locale | None, Translation]:
     text = _read_source(path)
     code = resolve_locale(lang, text, path)
     locale: Locale | None = None
     if code is not None:
-        locales = load_locales()
-        locale = locales.get(code)
-        if locale is None:
-            available = ", ".join(sorted(locales))
-            raise _Failure(f"unknown locale {code!r}; available: {available}")
+        locale = _find_locale(load_locales(), code)
     try:
         translation = translate(text, locale)
     except TokenizeFailure as exc:
@@ -171,6 +176,20 @@ def _locales(_namespace: argparse.Namespace) -> int:
     return 0
 
 
+def _keywords(namespace: argparse.Namespace) -> int:
+    locales = load_locales()
+    try:
+        locale = _find_locale(locales, namespace.code.strip().lower())
+    except _Failure as exc:
+        print(f"polyglot-python: {exc.message}", file=sys.stderr)
+        return 1
+    width = max(len(word) for word in keyword.kwlist)
+    print(f"{'python':<{width}}  {locale.name}")
+    for word in keyword.kwlist:
+        print(f"{word:<{width}}  {locale.keywords[word]}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="polyglot-python",
@@ -210,6 +229,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     listing = subparsers.add_parser("locales", help="list bundled locales")
     listing.set_defaults(handler=_locales)
+
+    keywords = subparsers.add_parser(
+        "keywords", help="print a locale's keyword mapping"
+    )
+    keywords.add_argument("code", help="locale code, e.g. tr")
+    keywords.set_defaults(handler=_keywords)
 
     return parser
 

@@ -84,9 +84,10 @@ polyglot-python run examples/tour.tr
 | vi   | Tiếng Việt | `nếu`    | `hàm`       | `trả_về`  |
 | ja   | 日本語      | `もし`   | `関数`      | `返す`    |
 
-`polyglot-python locales` prints the full list. Every locale defines exactly the 35
-Python hard keywords (`keyword.kwlist`); soft keywords such as `match`, `case`
-and `type` stay English.
+`polyglot-python locales` prints the full list, and `polyglot-python keywords tr`
+prints one locale's complete Python-to-localized mapping. Every locale defines
+exactly the 35 Python hard keywords (`keyword.kwlist`); soft keywords such as
+`match`, `case` and `type` stay English.
 
 Locale selection order:
 
@@ -102,6 +103,7 @@ polyglot-python run FILE [--lang CODE] [args...]
 polyglot-python check FILE [--lang CODE]
 polyglot-python translate FILE [--lang CODE] [-o OUT]
 polyglot-python locales
+polyglot-python keywords CODE
 polyglot-python --version
 ```
 
@@ -146,7 +148,7 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 187 tests with 100% statement coverage, including every
+The suite contains 189 tests with 100% statement coverage, including every
 keyword in both directions for all 15 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS

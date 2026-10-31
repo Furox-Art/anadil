@@ -1,3 +1,4 @@
+import keyword
 import os
 import runpy
 import subprocess
@@ -147,6 +148,22 @@ def test_locales_lists_all_codes(capsys):
         "ja",
     ):
         assert code in output
+
+
+def test_keywords_lists_mapping(capsys):
+    assert main(["keywords", "TR"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert lines[0].split() == ["python", "Türkçe"]
+    assert len(lines) == 1 + len(keyword.kwlist)
+    mapping = dict(line.split() for line in lines[1:])
+    assert mapping == dict(polyglot_python.load_locales()["tr"].keywords)
+
+
+def test_keywords_unknown_locale(capsys):
+    assert main(["keywords", "xx"]) == 1
+    error = capsys.readouterr().err
+    assert "unknown locale" in error
+    assert "available:" in error
 
 
 def test_version(capsys):
