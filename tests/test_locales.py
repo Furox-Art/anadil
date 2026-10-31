@@ -4,7 +4,7 @@ import pytest
 
 from polyglot_python import load_locales, resolve_locale
 
-EXPECTED_CODES = {"tr", "es", "pt", "de", "fr", "zh", "hi", "ar"}
+EXPECTED_CODES = {"tr", "es", "pt", "de", "fr", "zh", "hi", "ar", "ru"}
 
 
 def test_all_locales_present_and_complete():
@@ -44,6 +44,7 @@ def test_reverse_keywords_roundtrip():
         ("zh", "class", "类"),
         ("hi", "return", "लौटाओ"),
         ("ar", "import", "استورد"),
+        ("ru", "if", "если"),
     ],
 )
 def test_known_mappings(code, python_word, local_word):
@@ -60,6 +61,11 @@ def test_resolve_directive():
 
 def test_resolve_suffix():
     assert resolve_locale(None, "print(1)\n", "program.DE") == "de"
+
+
+@pytest.mark.parametrize("code", sorted(EXPECTED_CODES))
+def test_every_locale_resolves_by_suffix(code):
+    assert resolve_locale(None, "print(1)\n", f"program.{code}") == code
 
 
 def test_resolve_none():
