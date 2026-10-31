@@ -148,12 +148,17 @@ def _run(namespace: argparse.Namespace) -> int:
 
 
 def _check(namespace: argparse.Namespace) -> int:
-    try:
-        locale, translation = _prepare(namespace.file, namespace.lang)
-    except _Failure as exc:
-        print(f"polyglot-python: {exc.message}", file=sys.stderr)
-        return 1
-    return 0 if _compile(namespace.file, locale, translation) is not None else 1
+    ok = True
+    for path in namespace.files:
+        try:
+            locale, translation = _prepare(path, namespace.lang)
+        except _Failure as exc:
+            print(f"polyglot-python: {exc.message}", file=sys.stderr)
+            ok = False
+            continue
+        if _compile(path, locale, translation) is None:
+            ok = False
+    return 0 if ok else 1
 
 
 def _translate(namespace: argparse.Namespace) -> int:
@@ -233,9 +238,9 @@ def build_parser() -> argparse.ArgumentParser:
     transform.set_defaults(handler=_translate)
 
     check = subparsers.add_parser(
-        "check", help="translate and compile a program without running it"
+        "check", help="translate and compile programs without running them"
     )
-    check.add_argument("file", help="localized source file")
+    check.add_argument("files", nargs="+", metavar="FILE", help="localized source files")
     check.add_argument("--lang", metavar="CODE", help="locale code, e.g. tr")
     check.set_defaults(handler=_check)
 
