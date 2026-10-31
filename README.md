@@ -13,14 +13,20 @@ syntax with your words.
 ## Install
 
 ```bash
-pip install polyglot-python   # after the first release
+pip install polyglot-python
 pip install -e .              # from source
 ```
 
-The first release is prepared but not yet on PyPI; install from source until it
-is published. Requires Python 3.12+. Python 3.10/3.11 are not supported because
+Requires Python 3.12+. Python 3.10/3.11 are not supported because
 their tokenizer splits Indic combining marks, so several Hindi keywords would
 not translate. No runtime dependencies.
+
+Node.js users can install the thin npm wrapper. It forwards every command to
+the Python CLI, so the Python package must be installed as well.
+
+```bash
+npm install -g polyglot-python
+```
 
 ## Quick start
 
@@ -125,13 +131,14 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 119 tests with 100% statement coverage, including every
+The suite contains 120 tests with 100% statement coverage, including every
 keyword in both directions for all 9 locales, end-to-end CLI runs of every
-example, version consistency with the changelog, and byte-level determinism
-checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS at 3.12, enforces the
-100% coverage gate on Linux 3.12, translates every example twice on all three
-operating systems to compare bytes and line counts, and builds the wheel,
-installs it into a clean environment, and smoke-tests it. Dependabot keeps
+example, version consistency with the changelog and the npm wrapper, and
+byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS
+at 3.12, enforces the 100% coverage gate on Linux 3.12, translates every
+example twice on all three operating systems to compare bytes and line counts,
+builds the wheel, installs it into a clean environment, and smoke-tests it,
+and runs the npm wrapper against the installed Python package. Dependabot keeps
 GitHub Actions and development dependencies current. A separate release
 workflow publishes tagged GitHub Releases to PyPI through Trusted Publishing.
 
@@ -147,6 +154,15 @@ and stores no API token.
    `src/polyglot_python/__init__.py` together; the test suite rejects drift.
 3. Publish a GitHub Release with tag `v<version>`. The release workflow verifies
    the tag, builds the sdist and wheel, and uploads them to PyPI.
+
+The npm wrapper in `npm/` carries the same version, and the test suite rejects
+drift. Publishing it needs an authenticated npm session; the first publish
+creates the package:
+
+```bash
+cd npm
+npm publish
+```
 
 ## License
 

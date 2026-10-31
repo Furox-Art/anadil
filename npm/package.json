@@ -1,0 +1,37 @@
+{
+  "name": "polyglot-python",
+  "version": "0.2.0",
+  "description": "Node.js wrapper for the polyglot-python CLI: deterministic multilingual Python keywords.",
+  "license": "MIT",
+  "bin": {
+    "polyglot-python": "bin/polyglot-python.js"
+  },
+  "files": [
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Furox-Art/polyglot-python.git",
+    "directory": "npm"
+  },
+  "homepage": "https://github.com/Furox-Art/polyglot-python",
+  "bugs": {
+    "url": "https://github.com/Furox-Art/polyglot-python/issues"
+  },
+  "keywords": [
+    "python",
+    "transpiler",
+    "localization",
+    "multilingual",
+    "deterministic",
+    "cli"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

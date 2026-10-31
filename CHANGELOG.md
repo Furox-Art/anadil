@@ -12,6 +12,7 @@ All notable changes to this project are documented here. The format follows
   executing, with localized syntax errors.
 - Russian (`ru`) locale, including `examples/classify.ru`.
 - Release workflow using PyPI Trusted Publishing.
+- npm wrapper package that forwards to the Python CLI.
 
 ### Changed
 

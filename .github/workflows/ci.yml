@@ -98,3 +98,28 @@ jobs:
         run: |
           /tmp/wheel-venv/bin/polyglot-python check examples/classify.ru
           /tmp/wheel-venv/bin/polyglot-python run examples/classify.tr | tail -n 1 | grep -qx FizzBuzz
+
+  npm:
+    name: npm wrapper
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install the Python package
+        run: python -m pip install .
+      - name: Smoke test the npm wrapper
+        shell: bash
+        run: |
+          version=$(node -p "require('./npm/package.json').version")
+          node npm/bin/polyglot-python.js --version | grep -qx "polyglot-python $version"
+          node npm/bin/polyglot-python.js check examples/classify.ru
+          node npm/bin/polyglot-python.js run examples/classify.tr | tail -n 1 | grep -qx FizzBuzz
+      - name: Check npm package contents
+        working-directory: npm
+        run: npm pack --dry-run
