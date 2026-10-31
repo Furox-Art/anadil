@@ -1,4 +1,4 @@
-"""anadil: deterministic multilingual Python keyword transpiler."""
+"""polyglot-python: deterministic multilingual Python keyword transpiler."""
 
 from .translator import (
     Locale,

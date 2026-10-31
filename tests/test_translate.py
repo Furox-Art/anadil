@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 
 import pytest
 
-from anadil import TokenizeFailure, load_locales, translate
+from polyglot_python import TokenizeFailure, load_locales, translate
 
 LOCALES = load_locales()
 TR = LOCALES["tr"]

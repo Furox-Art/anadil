@@ -31,7 +31,7 @@ _SUFFIX_LOCALES = {
     ".ar": "ar",
 }
 
-_DIRECTIVE = re.compile(r"^#\s*anadil:\s*([A-Za-z][A-Za-z0-9_-]*)\s*$")
+_DIRECTIVE = re.compile(r"^#\s*polyglot-python:\s*([A-Za-z][A-Za-z0-9_-]*)\s*$")
 
 _MESSAGE_KEYS = (
     "syntax_error",
@@ -42,15 +42,15 @@ _MESSAGE_KEYS = (
 _SIGNIFICANT = (tokenize.NAME, tokenize.OP, tokenize.NUMBER, tokenize.STRING)
 
 
-class AnadilError(Exception):
-    """Base class for all anadil errors."""
+class PolyglotError(Exception):
+    """Base class for all polyglot-python errors."""
 
 
-class LocaleError(AnadilError):
+class LocaleError(PolyglotError):
     """Raised when locale data is malformed or a locale is unknown."""
 
 
-class TokenizeFailure(AnadilError):
+class TokenizeFailure(PolyglotError):
     """Raised when the localized source cannot be tokenized."""
 
     def __init__(self, line: int, column: int, detail: str) -> None:
@@ -168,7 +168,7 @@ def _validate_messages(code: str, raw: object) -> Mapping[str, str]:
 @lru_cache(maxsize=1)
 def load_locales() -> Mapping[str, Locale]:
     """Load and validate every bundled locale."""
-    raw_text = resources.files("anadil").joinpath("locales.json").read_text(
+    raw_text = resources.files("polyglot_python").joinpath("locales.json").read_text(
         encoding="utf-8"
     )
     return _parse_locales(raw_text)
@@ -197,7 +197,7 @@ def _parse_locales(raw_text: str) -> Mapping[str, Locale]:
 def resolve_locale(
     explicit: str | None, text: str, filename: str | None = None
 ) -> str | None:
-    """Resolve a locale code: --lang, then ``# anadil: xx``, then suffix."""
+    """Resolve a locale code: --lang, then ``# polyglot-python: xx``, then suffix."""
     if explicit:
         return explicit.strip().lower()
     first_line = text.split("\n", 1)[0].strip()

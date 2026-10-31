@@ -2,7 +2,7 @@ import keyword
 
 import pytest
 
-from anadil import load_locales, resolve_locale
+from polyglot_python import load_locales, resolve_locale
 
 EXPECTED_CODES = {"tr", "es", "pt", "de", "fr", "zh", "hi", "ar"}
 
@@ -51,11 +51,11 @@ def test_known_mappings(code, python_word, local_word):
 
 
 def test_resolve_explicit_wins():
-    assert resolve_locale("ES", "# anadil: tr\n", "x.fr") == "es"
+    assert resolve_locale("ES", "# polyglot-python: tr\n", "x.fr") == "es"
 
 
 def test_resolve_directive():
-    assert resolve_locale(None, "# anadil: zh\nprint(1)\n") == "zh"
+    assert resolve_locale(None, "# polyglot-python: zh\nprint(1)\n") == "zh"
 
 
 def test_resolve_suffix():
@@ -68,4 +68,4 @@ def test_resolve_none():
 
 
 def test_resolve_directive_must_be_first_line():
-    assert resolve_locale(None, "x = 1\n# anadil: tr\n") is None
+    assert resolve_locale(None, "x = 1\n# polyglot-python: tr\n") is None
