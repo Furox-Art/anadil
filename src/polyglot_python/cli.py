@@ -164,10 +164,10 @@ def _translate(namespace: argparse.Namespace) -> int:
 
 def _locales(_namespace: argparse.Namespace) -> int:
     locales = load_locales()
-    print(f"{'code':<6}{'name':<16}keywords")
+    print(f"{'code':<6}{'name':<18}keywords")
     for code in sorted(locales):
         locale = locales[code]
-        print(f"{code:<6}{locale.name:<16}{len(locale.keywords)}")
+        print(f"{code:<6}{locale.name:<18}{len(locale.keywords)}")
     return 0
 
 

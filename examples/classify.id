@@ -1,0 +1,12 @@
+fungsi classify(n):
+    jika n % 15 == 0:
+        kembalikan "FizzBuzz"
+    selain_jika n % 3 == 0:
+        kembalikan "Fizz"
+    selain_jika n % 5 == 0:
+        kembalikan "Buzz"
+    selain:
+        kembalikan str(n)
+
+untuk n dalam range(1, 16):
+    print(classify(n))

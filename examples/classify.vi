@@ -1,0 +1,12 @@
+hàm classify(n):
+    nếu n % 15 == 0:
+        trả_về "FizzBuzz"
+    nếu_không_thì n % 3 == 0:
+        trả_về "Fizz"
+    nếu_không_thì n % 5 == 0:
+        trả_về "Buzz"
+    khác:
+        trả_về str(n)
+
+cho n trong range(1, 16):
+    print(classify(n))

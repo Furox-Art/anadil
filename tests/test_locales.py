@@ -4,7 +4,23 @@ import pytest
 
 from polyglot_python import load_locales, resolve_locale
 
-EXPECTED_CODES = {"tr", "es", "pt", "de", "fr", "zh", "hi", "ar", "ru"}
+EXPECTED_CODES = {
+    "tr",
+    "es",
+    "pt",
+    "de",
+    "fr",
+    "zh",
+    "hi",
+    "ar",
+    "ru",
+    "it",
+    "nl",
+    "pl",
+    "id",
+    "vi",
+    "ja",
+}
 
 
 def test_all_locales_present_and_complete():
@@ -45,6 +61,12 @@ def test_reverse_keywords_roundtrip():
         ("hi", "return", "लौटाओ"),
         ("ar", "import", "استورد"),
         ("ru", "if", "если"),
+        ("it", "if", "se"),
+        ("nl", "if", "indien"),
+        ("pl", "while", "dopóki"),
+        ("id", "return", "kembalikan"),
+        ("vi", "import", "nhập"),
+        ("ja", "class", "クラス"),
     ],
 )
 def test_known_mappings(code, python_word, local_word):

@@ -1,0 +1,12 @@
+関数 classify(n):
+    もし n % 15 == 0:
+        返す "FizzBuzz"
+    そうでなくもし n % 3 == 0:
+        返す "Fizz"
+    そうでなくもし n % 5 == 0:
+        返す "Buzz"
+    そうでなければ:
+        返す str(n)
+
+各 n の中で range(1, 16):
+    print(classify(n))

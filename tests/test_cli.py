@@ -129,7 +129,23 @@ def test_translate_to_file(tmp_path):
 def test_locales_lists_all_codes(capsys):
     assert main(["locales"]) == 0
     output = capsys.readouterr().out
-    for code in ("tr", "es", "pt", "de", "fr", "zh", "hi", "ar", "ru"):
+    for code in (
+        "tr",
+        "es",
+        "pt",
+        "de",
+        "fr",
+        "zh",
+        "hi",
+        "ar",
+        "ru",
+        "it",
+        "nl",
+        "pl",
+        "id",
+        "vi",
+        "ja",
+    ):
         assert code in output
 
 

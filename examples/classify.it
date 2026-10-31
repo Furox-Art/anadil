@@ -1,0 +1,12 @@
+funzione classify(n):
+    se n % 15 == 0:
+        restituisci "FizzBuzz"
+    altrimenti_se n % 3 == 0:
+        restituisci "Fizz"
+    altrimenti_se n % 5 == 0:
+        restituisci "Buzz"
+    altrimenti:
+        restituisci str(n)
+
+per n in range(1, 16):
+    print(classify(n))

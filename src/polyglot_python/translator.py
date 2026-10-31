@@ -30,6 +30,12 @@ _SUFFIX_LOCALES = {
     ".hi": "hi",
     ".ar": "ar",
     ".ru": "ru",
+    ".it": "it",
+    ".nl": "nl",
+    ".pl": "pl",
+    ".id": "id",
+    ".vi": "vi",
+    ".ja": "ja",
 }
 
 _DIRECTIVE = re.compile(r"^#\s*polyglot-python:\s*([A-Za-z][A-Za-z0-9_-]*)\s*$")
