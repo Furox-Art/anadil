@@ -112,7 +112,8 @@ program as `sys.argv[1:]`.
   Turkish prose; it understands Python syntax written with localized keywords.
 - The local prototype ships 9 locales. Other languages can be added by editing
   `src/polyglot_python/locales.json`; malformed tables are rejected at load time.
-- Tested on CPython 3.12 on Windows; the code targets 3.12+.
+- Tested on CPython 3.12 on Windows; CI covers 3.12-3.14 on Linux and 3.12
+  on Windows and macOS. The code targets 3.12+.
 
 ## Development
 
@@ -122,11 +123,14 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 89 tests with 100% statement coverage, including an
-end-to-end execution of the same program in all 9 locales and byte-level
-determinism checks. CI runs Ubuntu 3.12-3.13 plus Windows and macOS at 3.12,
-enforces the 100% coverage gate on Linux 3.12, and translates every example
-twice on all three operating systems to compare bytes and line counts.
+The suite contains 117 tests with 100% statement coverage, including every
+keyword in both directions for all 9 locales, end-to-end CLI runs of every
+example, and byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus
+Windows and macOS at 3.12, enforces the 100% coverage gate on Linux 3.12,
+translates every example twice on all three operating systems to compare bytes
+and line counts, and builds the wheel, installs it into a clean environment,
+and smoke-tests it. Dependabot keeps GitHub Actions and development
+dependencies current.
 
 ## License
 
