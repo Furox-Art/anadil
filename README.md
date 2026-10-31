@@ -111,13 +111,15 @@ program as `sys.argv[1:]`.
 
 ```bash
 python -m venv .venv
-.venv/Scripts/pip install -e . pytest pytest-cov
-.venv/Scripts/python -m pytest -q --cov=anadil
+.venv/Scripts/pip install -e ".[dev]"
+.venv/Scripts/python -m pytest -q --cov=anadil --cov-fail-under=100
 ```
 
 The suite contains 72 tests with 100% statement coverage, including an
 end-to-end execution of the same program in all 8 locales and byte-level
-determinism checks.
+determinism checks. CI runs Ubuntu 3.10-3.13 plus Windows and macOS at 3.12,
+enforces the 100% coverage gate on Linux, and translates every example twice
+on all three operating systems to compare bytes and line counts.
 
 ## License
 
