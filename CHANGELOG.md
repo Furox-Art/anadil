@@ -26,6 +26,8 @@ All notable changes to this project are documented here. The format follows
 - `run` now executes a program the way `python FILE` does: the script's
   directory leads `sys.path`, so sibling imports work, and the program is
   registered as the `__main__` module.
+- A downstream pipe that closes early (for example `translate FILE | head`) no
+  longer prints a traceback; the command exits quietly with status 1.
 
 ## [0.2.1] - 2026-11-01
 

@@ -176,6 +176,24 @@ def test_translate_to_stdout(tmp_path, capsys):
     )
 
 
+class _BrokenStdout:
+    def write(self, text):
+        raise BrokenPipeError
+
+    def flush(self):
+        raise BrokenPipeError
+
+    def fileno(self):
+        raise OSError("no file descriptor")
+
+
+def test_translate_broken_pipe_is_quiet(tmp_path, monkeypatch, capsys):
+    path = _write(tmp_path, "program.tr", TR_PROGRAM)
+    monkeypatch.setattr(sys, "stdout", _BrokenStdout())
+    assert main(["translate", str(path)]) == 1
+    assert capsys.readouterr().err == ""
+
+
 def test_translate_to_file(tmp_path):
     path = _write(tmp_path, "program.tr", TR_PROGRAM)
     output = tmp_path / "program.py"

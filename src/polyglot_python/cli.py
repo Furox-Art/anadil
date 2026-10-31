@@ -256,11 +256,25 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _silence_broken_stdout() -> None:
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    try:
+        os.dup2(devnull, sys.stdout.fileno())
+    except (OSError, ValueError):
+        pass
+    finally:
+        os.close(devnull)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     _configure_console()
     parser = build_parser()
     namespace = parser.parse_args(argv)
-    return namespace.handler(namespace)
+    try:
+        return namespace.handler(namespace)
+    except BrokenPipeError:
+        _silence_broken_stdout()
+        return 1
 
 
 if __name__ == "__main__":
