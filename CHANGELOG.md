@@ -20,6 +20,10 @@ All notable changes to this project are documented here. The format follows
   and Greek (`el`), each with `classify` and `tour` example programs.
 - `check` accepts several files in one invocation and exits nonzero if any of
   them fails, so a whole set of localized sources can be validated in CI.
+- `check` also accepts directories, which are searched recursively for files
+  whose suffix names a locale, skipping hidden entries.
+- `has_locale_suffix(path)` is exported for callers that need to recognize
+  localized file names.
 - Python 3.15 coverage: the CI matrix and package classifiers include 3.15,
   where PEP 810's soft keyword `lazy` stays English like `match`, `case` and
   `type`.

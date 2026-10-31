@@ -2,7 +2,7 @@ import keyword
 
 import pytest
 
-from polyglot_python import load_locales, resolve_locale
+from polyglot_python import has_locale_suffix, load_locales, resolve_locale
 
 EXPECTED_CODES = {
     "tr",
@@ -107,3 +107,10 @@ def test_resolve_none():
 
 def test_resolve_directive_must_be_first_line():
     assert resolve_locale(None, "x = 1\n# polyglot-python: tr\n") is None
+
+
+def test_has_locale_suffix():
+    assert has_locale_suffix("program.TR")
+    assert has_locale_suffix("a/b/tour.ja")
+    assert not has_locale_suffix("program.py")
+    assert not has_locale_suffix("program")

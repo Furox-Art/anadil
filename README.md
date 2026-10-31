@@ -105,7 +105,7 @@ Locale selection order:
 
 ```text
 polyglot-python run FILE [--lang CODE] [args...]
-polyglot-python check FILE [FILE ...] [--lang CODE]
+polyglot-python check PATH [PATH ...] [--lang CODE]
 polyglot-python translate FILE [--lang CODE] [-o OUT]
 polyglot-python locales
 polyglot-python keywords CODE
@@ -126,8 +126,9 @@ normally, and the program is registered as the `__main__` module.
 - `translate -o` and stdout output are UTF-8 with LF line endings on every
   platform, so exports are byte-identical and re-verifiable.
 - `check` translates and compiles without executing the programs, so localized
-  sources can be validated safely; it accepts several files and exits nonzero
-  if any of them fails.
+  sources can be validated safely; it accepts several paths and exits nonzero
+  if any of them fails. A directory is searched recursively for files whose
+  suffix names a locale, skipping hidden files and directories.
 - A localized keyword after a dot is treated as an attribute name and never
   rewritten.
 - Localized keywords are reserved words in their locale.
@@ -160,7 +161,7 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 236 tests with 100% statement coverage, including every
+The suite contains 240 tests with 100% statement coverage, including every
 keyword in both directions for all 20 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.15 plus Windows and macOS

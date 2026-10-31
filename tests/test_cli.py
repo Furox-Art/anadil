@@ -165,6 +165,36 @@ def test_check_reports_each_failure(tmp_path, capsys):
     assert "missing.tr" in error
 
 
+def test_check_directory_finds_localized_files(tmp_path, capsys):
+    nested = tmp_path / "pkg"
+    nested.mkdir()
+    _write(tmp_path, "a.tr", "print(1)\n")
+    (nested / "b.es").write_text("print(2)\n", encoding="utf-8")
+    (nested / "notes.py").write_text("print(\n", encoding="utf-8")
+    (tmp_path / ".secret.tr").write_text("eğer Doğru\n", encoding="utf-8")
+    hidden = tmp_path / ".hidden"
+    hidden.mkdir()
+    (hidden / "c.tr").write_text("eğer Doğru\n", encoding="utf-8")
+    assert main(["check", str(tmp_path)]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_check_directory_reports_broken_file(tmp_path, capsys):
+    nested = tmp_path / "sub"
+    nested.mkdir()
+    (nested / "broken.tr").write_text("eğer Doğru\n    geç\n", encoding="utf-8")
+    assert main(["check", str(tmp_path)]) == 1
+    assert "broken.tr:1:" in capsys.readouterr().err
+
+
+def test_check_directory_without_localized_files(tmp_path, capsys):
+    (tmp_path / "notes.py").write_text("print(1)\n", encoding="utf-8")
+    assert main(["check", str(tmp_path)]) == 1
+    assert "no localized files" in capsys.readouterr().err
+
+
 def test_translate_to_stdout(tmp_path, capsys):
     path = _write(tmp_path, "program.tr", TR_PROGRAM)
     assert main(["translate", "--lang", "tr", str(path)]) == 0
