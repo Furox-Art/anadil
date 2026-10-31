@@ -92,7 +92,7 @@ polyglot-python run examples/tour.tr
 `polyglot-python locales` prints the full list, and `polyglot-python keywords tr`
 prints one locale's complete Python-to-localized mapping. Every locale defines
 exactly the 35 Python hard keywords (`keyword.kwlist`); soft keywords such as
-`match`, `case` and `type` stay English.
+`match`, `case`, `type` and 3.15's `lazy` stay English.
 
 Locale selection order:
 
@@ -149,7 +149,7 @@ normally, and the program is registered as the `__main__` module.
   Turkish prose; it understands Python syntax written with localized keywords.
 - The local prototype ships 20 locales. Other languages can be added by editing
   `src/polyglot_python/locales.json`; malformed tables are rejected at load time.
-- Tested on CPython 3.12 on Windows; CI covers 3.12-3.14 on Linux and 3.12
+- Tested on CPython 3.12 on Windows; CI covers 3.12-3.15 on Linux and 3.12
   on Windows and macOS. The code targets 3.12+.
 
 ## Development
@@ -163,7 +163,7 @@ python -m venv .venv
 The suite contains 236 tests with 100% statement coverage, including every
 keyword in both directions for all 20 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
-byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS
+byte-level determinism checks. CI runs Ubuntu 3.12-3.15 plus Windows and macOS
 at 3.12, enforces the 100% coverage gate on Linux 3.12, translates every
 example twice on all three operating systems to compare bytes and line counts,
 builds the wheel, installs it into a clean environment, and smoke-tests it,
