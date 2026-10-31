@@ -138,6 +138,8 @@ normally, and the program is registered as the `__main__` module.
 - Exit codes from the executed program are propagated.
 - `run` matches CPython's script behavior: the script's directory leads
   `sys.path` (so local imports work) and the program is the `__main__` module.
+- A downstream pipe that closes early (`translate FILE | head`) exits quietly
+  with status 1 instead of printing a traceback.
 
 ## Limits
 
@@ -158,7 +160,7 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 235 tests with 100% statement coverage, including every
+The suite contains 236 tests with 100% statement coverage, including every
 keyword in both directions for all 20 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS
