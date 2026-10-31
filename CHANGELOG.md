@@ -20,6 +20,9 @@ All notable changes to this project are documented here. The format follows
   and Greek (`el`), each with `classify` and `tour` example programs.
 - `check` accepts several files in one invocation and exits nonzero if any of
   them fails, so a whole set of localized sources can be validated in CI.
+- Python 3.15 coverage: the CI matrix and package classifiers include 3.15,
+  where PEP 810's soft keyword `lazy` stays English like `match`, `case` and
+  `type`.
 
 ### Fixed
 
