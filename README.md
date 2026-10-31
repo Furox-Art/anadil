@@ -13,12 +13,14 @@ syntax with your words.
 ## Install
 
 ```bash
-pip install -e .
+pip install polyglot-python   # after the first release
+pip install -e .              # from source
 ```
 
-Requires Python 3.12+. Python 3.10/3.11 are not supported because their
-tokenizer splits Indic combining marks, so several Hindi keywords would not
-translate. No runtime dependencies.
+The first release is prepared but not yet on PyPI; install from source until it
+is published. Requires Python 3.12+. Python 3.10/3.11 are not supported because
+their tokenizer splits Indic combining marks, so several Hindi keywords would
+not translate. No runtime dependencies.
 
 ## Quick start
 
@@ -123,14 +125,28 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 117 tests with 100% statement coverage, including every
+The suite contains 119 tests with 100% statement coverage, including every
 keyword in both directions for all 9 locales, end-to-end CLI runs of every
-example, and byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus
-Windows and macOS at 3.12, enforces the 100% coverage gate on Linux 3.12,
-translates every example twice on all three operating systems to compare bytes
-and line counts, and builds the wheel, installs it into a clean environment,
-and smoke-tests it. Dependabot keeps GitHub Actions and development
-dependencies current.
+example, version consistency with the changelog, and byte-level determinism
+checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS at 3.12, enforces the
+100% coverage gate on Linux 3.12, translates every example twice on all three
+operating systems to compare bytes and line counts, and builds the wheel,
+installs it into a clean environment, and smoke-tests it. Dependabot keeps
+GitHub Actions and development dependencies current. A separate release
+workflow publishes tagged GitHub Releases to PyPI through Trusted Publishing.
+
+## Releasing
+
+Publishing uses [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
+and stores no API token.
+
+1. On PyPI, add a pending publisher for project `polyglot-python`: owner
+   `Furox-Art`, repository `polyglot-python`, workflow `release.yml`,
+   environment `pypi`.
+2. Change `version` in `pyproject.toml` and
+   `src/polyglot_python/__init__.py` together; the test suite rejects drift.
+3. Publish a GitHub Release with tag `v<version>`. The release workflow verifies
+   the tag, builds the sdist and wheel, and uploads them to PyPI.
 
 ## License
 

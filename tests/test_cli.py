@@ -135,7 +135,7 @@ def test_version(capsys):
     with pytest.raises(SystemExit) as caught:
         main(["--version"])
     assert caught.value.code == 0
-    assert "polyglot-python 0.1.0" in capsys.readouterr().out
+    assert "polyglot-python 0.2.0" in capsys.readouterr().out
 
 
 def test_run_token_error_is_localized(tmp_path, capsys):
