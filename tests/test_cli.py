@@ -56,6 +56,40 @@ def test_run_propagates_exit_code(tmp_path):
     assert main(["run", str(path)]) == 3
 
 
+def test_run_imports_sibling_modules(tmp_path, capsys):
+    (tmp_path / "helper.py").write_text(
+        "def answer():\n    return 42\n", encoding="utf-8"
+    )
+    path = _write(tmp_path, "main.tr", "içe_aktar helper\nprint(helper.answer())\n")
+    assert main(["run", str(path)]) == 0
+    assert capsys.readouterr().out.strip() == "42"
+    assert str(tmp_path) not in sys.path
+
+
+def test_run_registers_main_module(tmp_path, capsys):
+    source = (
+        "içe_aktar sys\n"
+        'print(sys.modules["__main__"] is sys.modules[__name__])\n'
+        'eğer __name__ == "__main__":\n'
+        '    print("guard")\n'
+    )
+    path = _write(tmp_path, "main.tr", source)
+    saved_argv = sys.argv
+    saved_main = sys.modules["__main__"]
+    assert main(["run", str(path)]) == 0
+    assert capsys.readouterr().out.split() == ["True", "guard"]
+    assert sys.argv is saved_argv
+    assert sys.modules["__main__"] is saved_main
+
+
+def test_run_without_existing_main_module(monkeypatch, tmp_path, capsys):
+    monkeypatch.delitem(sys.modules, "__main__")
+    path = _write(tmp_path, "ok.tr", "print(1)\n")
+    assert main(["run", str(path)]) == 0
+    assert capsys.readouterr().out.strip() == "1"
+    assert "__main__" not in sys.modules
+
+
 def test_run_syntax_error_is_localized(tmp_path, capsys):
     path = _write(tmp_path, "broken.tr", "eğer Doğru\n    geç\n")
     assert main(["run", str(path)]) == 1

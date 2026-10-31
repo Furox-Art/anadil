@@ -113,7 +113,9 @@ polyglot-python --version
 ```
 
 For `run`, place options before `FILE`; everything after `FILE` is passed to the
-program as `sys.argv[1:]`.
+program as `sys.argv[1:]`. The program executes the way `python FILE` would:
+the script's directory is placed first on `sys.path`, so sibling modules import
+normally, and the program is registered as the `__main__` module.
 
 ## Guarantees
 
@@ -133,6 +135,8 @@ program as `sys.argv[1:]`.
 - Error headers are localized; CPython's detail text (for example
   `ZeroDivisionError`) remains English for now.
 - Exit codes from the executed program are propagated.
+- `run` matches CPython's script behavior: the script's directory leads
+  `sys.path` (so local imports work) and the program is the `__main__` module.
 
 ## Limits
 
