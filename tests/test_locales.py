@@ -1,0 +1,71 @@
+import keyword
+
+import pytest
+
+from anadil import load_locales, resolve_locale
+
+EXPECTED_CODES = {"tr", "es", "pt", "de", "fr", "zh", "hi", "ar"}
+
+
+def test_all_locales_present_and_complete():
+    locales = load_locales()
+    assert set(locales) == EXPECTED_CODES
+    for code, locale in locales.items():
+        assert locale.code == code
+        assert locale.name
+        assert set(locale.keywords) == set(keyword.kwlist)
+        assert len(locale.keywords) == 35
+        values = list(locale.keywords.values())
+        assert len(set(values)) == len(values)
+        assert all(value.isidentifier() for value in values)
+        assert set(locale.messages) == {
+            "syntax_error",
+            "runtime_error",
+            "token_error",
+        }
+
+
+def test_reverse_keywords_roundtrip():
+    for locale in load_locales().values():
+        reverse = locale.reverse_keywords
+        assert len(reverse) == len(locale.keywords)
+        for python_word, local_word in locale.keywords.items():
+            assert reverse[local_word] == python_word
+
+
+@pytest.mark.parametrize(
+    ("code", "python_word", "local_word"),
+    [
+        ("tr", "if", "eğer"),
+        ("es", "def", "función"),
+        ("pt", "else", "senão"),
+        ("de", "while", "solange"),
+        ("fr", "return", "retourner"),
+        ("zh", "class", "类"),
+        ("hi", "return", "लौटाओ"),
+        ("ar", "import", "استورد"),
+    ],
+)
+def test_known_mappings(code, python_word, local_word):
+    assert load_locales()[code].keywords[python_word] == local_word
+
+
+def test_resolve_explicit_wins():
+    assert resolve_locale("ES", "# anadil: tr\n", "x.fr") == "es"
+
+
+def test_resolve_directive():
+    assert resolve_locale(None, "# anadil: zh\nprint(1)\n") == "zh"
+
+
+def test_resolve_suffix():
+    assert resolve_locale(None, "print(1)\n", "program.DE") == "de"
+
+
+def test_resolve_none():
+    assert resolve_locale(None, "print(1)\n", "program.py") is None
+    assert resolve_locale(None, "print(1)\n") is None
+
+
+def test_resolve_directive_must_be_first_line():
+    assert resolve_locale(None, "x = 1\n# anadil: tr\n") is None

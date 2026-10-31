@@ -1,0 +1,12 @@
+fonksiyon classify(n):
+    eğer n % 15 == 0:
+        döndür "FizzBuzz"
+    değilse_eğer n % 3 == 0:
+        döndür "Fizz"
+    değilse_eğer n % 5 == 0:
+        döndür "Buzz"
+    değilse:
+        döndür str(n)
+
+için n içinde range(1, 16):
+    print(classify(n))

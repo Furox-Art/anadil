@@ -1,0 +1,12 @@
+دالة classify(n):
+    إذا n % 15 == 0:
+        إرجاع "FizzBuzz"
+    وإلا_إذا n % 3 == 0:
+        إرجاع "Fizz"
+    وإلا_إذا n % 5 == 0:
+        إرجاع "Buzz"
+    وإلا:
+        إرجاع str(n)
+
+لكل n في range(1, 16):
+    print(classify(n))

@@ -1,0 +1,12 @@
+fonction classify(n):
+    si n % 15 == 0:
+        retourner "FizzBuzz"
+    sinon_si n % 3 == 0:
+        retourner "Fizz"
+    sinon_si n % 5 == 0:
+        retourner "Buzz"
+    sinon:
+        retourner str(n)
+
+pour n dans range(1, 16):
+    print(classify(n))

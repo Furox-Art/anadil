@@ -1,0 +1,12 @@
+函数 classify(n):
+    如果 n % 15 == 0:
+        返回 "FizzBuzz"
+    否则如果 n % 3 == 0:
+        返回 "Fizz"
+    否则如果 n % 5 == 0:
+        返回 "Buzz"
+    否则:
+        返回 str(n)
+
+对于 n 在 range(1, 16):
+    print(classify(n))
