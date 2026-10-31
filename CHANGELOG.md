@@ -16,6 +16,8 @@ All notable changes to this project are documented here. The format follows
   `async`/`await`) and is verified to translate back to a reference program.
 - `polyglot-python keywords CODE` prints a locale's complete
   Python-to-localized keyword table.
+- Five locales: Korean (`ko`), Ukrainian (`uk`), Romanian (`ro`), Swedish (`sv`)
+  and Greek (`el`), each with `classify` and `tour` example programs.
 
 ## [0.2.1] - 2026-11-01
 

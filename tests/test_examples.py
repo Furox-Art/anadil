@@ -22,6 +22,11 @@ EXPECTED_SUFFIXES = {
     ".id",
     ".vi",
     ".ja",
+    ".ko",
+    ".uk",
+    ".ro",
+    ".sv",
+    ".el",
 }
 
 ROOT = Path(__file__).resolve().parents[1]

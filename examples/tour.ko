@@ -1,0 +1,115 @@
+가져오기 asyncio
+가져오기 math 로 m
+에서 collections 가져오기 Counter
+
+LIMIT = 30
+registry = {}
+
+
+함수 fib(limit):
+    a, b = 0, 1
+    values = []
+    동안 참:
+        만약 a >= limit:
+            중단
+        values.append(a)
+        a, b = b, a + b
+    반환 values
+
+
+함수 evens(numbers):
+    각 number 안에 numbers:
+        만약 number % 2:
+            계속
+        생성 number
+
+
+함수 must_be_positive(value):
+    만약 value <= 0:
+        던지기 ValueError("not positive")
+    반환 value
+
+
+함수 safe_div(a, b):
+    시도:
+        단언 b != 0
+        반환 a / b
+    예외 AssertionError:
+        반환 없음
+    마지막으로:
+        넘기기
+
+
+클래스 Accumulator:
+    함수 __init__(self):
+        self.total = 0
+
+    함수 add(self, amount):
+        self.total += amount
+
+    함수 get(self):
+        반환 self.total
+
+
+클래스 Section:
+    함수 __enter__(self):
+        반환 self
+
+    함수 __exit__(self, exc_type, exc, traceback):
+        반환 거짓
+
+
+함수 register(name):
+    전역 registry
+    registry[name] = 참
+
+
+함수 outer():
+    count = 0
+
+    함수 inner():
+        비지역 count
+        count += 1
+        반환 count
+
+    반환 inner
+
+
+비동기 함수 report(value):
+    대기 asyncio.sleep(0)
+    만약 value 이다 없음 또는 아님 value:
+        반환 "empty"
+    아니면_만약 value > 10 그리고 value % 2 == 0:
+        반환 "big even"
+    아니면:
+        반환 "other"
+
+
+함수 main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    함께 Section():
+        각 value 안에 evens(values):
+            acc.add(value)
+    double = 람다 x: x * 2
+    squares = [double(v) 각 v 안에 values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    삭제 registry["fib"]
+    print("clean", "fib" 아님 안에 registry)
+
+
+만약 참:
+    main()

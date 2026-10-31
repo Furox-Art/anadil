@@ -146,6 +146,11 @@ def test_locales_lists_all_codes(capsys):
         "id",
         "vi",
         "ja",
+        "ko",
+        "uk",
+        "ro",
+        "sv",
+        "el",
     ):
         assert code in output
 

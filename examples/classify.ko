@@ -1,0 +1,12 @@
+함수 classify(n):
+    만약 n % 15 == 0:
+        반환 "FizzBuzz"
+    아니면_만약 n % 3 == 0:
+        반환 "Fizz"
+    아니면_만약 n % 5 == 0:
+        반환 "Buzz"
+    아니면:
+        반환 str(n)
+
+각 n 안에 range(1, 16):
+    print(classify(n))
