@@ -206,6 +206,11 @@ def _parse_locales(raw_text: str) -> Mapping[str, Locale]:
     return MappingProxyType(locales)
 
 
+def has_locale_suffix(path: str) -> bool:
+    """Whether the file name ends in a suffix that selects a locale."""
+    return Path(path).suffix.lower() in _SUFFIX_LOCALES
+
+
 def resolve_locale(
     explicit: str | None, text: str, filename: str | None = None
 ) -> str | None:

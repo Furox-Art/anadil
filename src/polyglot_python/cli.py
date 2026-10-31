@@ -16,6 +16,7 @@ from .translator import (
     Locale,
     TokenizeFailure,
     Translation,
+    has_locale_suffix,
     load_locales,
     resolve_locale,
     translate,
@@ -147,9 +148,34 @@ def _run(namespace: argparse.Namespace) -> int:
     return 0
 
 
+def _collect(paths: Sequence[str]) -> tuple[list[str], list[str]]:
+    files: list[str] = []
+    errors: list[str] = []
+    for raw in paths:
+        if not os.path.isdir(raw):
+            files.append(raw)
+            continue
+        found: list[str] = []
+        for root, dirs, names in os.walk(raw, followlinks=False):
+            dirs[:] = sorted(name for name in dirs if not name.startswith("."))
+            for name in sorted(names):
+                if name.startswith("."):
+                    continue
+                candidate = os.path.join(root, name)
+                if has_locale_suffix(candidate):
+                    found.append(candidate)
+        if not found:
+            errors.append(f"no localized files in {raw}")
+        files.extend(found)
+    return files, errors
+
+
 def _check(namespace: argparse.Namespace) -> int:
-    ok = True
-    for path in namespace.files:
+    files, errors = _collect(namespace.files)
+    ok = not errors
+    for message in errors:
+        print(f"polyglot-python: {message}", file=sys.stderr)
+    for path in files:
         try:
             locale, translation = _prepare(path, namespace.lang)
         except _Failure as exc:
@@ -240,7 +266,12 @@ def build_parser() -> argparse.ArgumentParser:
     check = subparsers.add_parser(
         "check", help="translate and compile programs without running them"
     )
-    check.add_argument("files", nargs="+", metavar="FILE", help="localized source files")
+    check.add_argument(
+        "files",
+        nargs="+",
+        metavar="PATH",
+        help="localized source files, or directories to search",
+    )
     check.add_argument("--lang", metavar="CODE", help="locale code, e.g. tr")
     check.set_defaults(handler=_check)
 
