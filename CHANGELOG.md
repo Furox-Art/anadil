@@ -18,6 +18,8 @@ All notable changes to this project are documented here. The format follows
   Python-to-localized keyword table.
 - Five locales: Korean (`ko`), Ukrainian (`uk`), Romanian (`ro`), Swedish (`sv`)
   and Greek (`el`), each with `classify` and `tour` example programs.
+- `check` accepts several files in one invocation and exits nonzero if any of
+  them fails, so a whole set of localized sources can be validated in CI.
 
 ### Fixed
 

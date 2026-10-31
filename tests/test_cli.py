@@ -138,6 +138,33 @@ def test_check_missing_file(capsys):
     assert "cannot read" in capsys.readouterr().err
 
 
+def test_check_multiple_files(tmp_path, capsys):
+    ok = _write(tmp_path, "ok.tr", "print(1)\n")
+    broken = _write(tmp_path, "broken.tr", "eğer Doğru\n    geç\n")
+    assert main(["check", str(ok), str(broken)]) == 1
+    error = capsys.readouterr().err
+    assert "Sözdizimi hatası" in error
+    assert "broken.tr:1:" in error
+
+
+def test_check_multiple_files_all_valid(tmp_path, capsys):
+    first = _write(tmp_path, "a.tr", "print(1)\n")
+    second = _write(tmp_path, "b.txt", "print(2)\n")
+    assert main(["check", "--lang", "tr", str(first), str(second)]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+
+def test_check_reports_each_failure(tmp_path, capsys):
+    broken = _write(tmp_path, "broken.tr", "eğer Doğru\n    geç\n")
+    missing = tmp_path / "missing.tr"
+    assert main(["check", str(broken), str(missing)]) == 1
+    error = capsys.readouterr().err
+    assert "broken.tr" in error
+    assert "missing.tr" in error
+
+
 def test_translate_to_stdout(tmp_path, capsys):
     path = _write(tmp_path, "program.tr", TR_PROGRAM)
     assert main(["translate", "--lang", "tr", str(path)]) == 0
