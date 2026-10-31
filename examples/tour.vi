@@ -1,0 +1,115 @@
+nhập asyncio
+nhập math như m
+từ collections nhập Counter
+
+LIMIT = 30
+registry = {}
+
+
+hàm fib(limit):
+    a, b = 0, 1
+    values = []
+    trong_khi Đúng:
+        nếu a >= limit:
+            dừng
+        values.append(a)
+        a, b = b, a + b
+    trả_về values
+
+
+hàm evens(numbers):
+    cho number trong numbers:
+        nếu number % 2:
+            tiếp_tục
+        sinh_ra number
+
+
+hàm must_be_positive(value):
+    nếu value <= 0:
+        ném ValueError("not positive")
+    trả_về value
+
+
+hàm safe_div(a, b):
+    thử:
+        khẳng_định b != 0
+        trả_về a / b
+    ngoại_lệ AssertionError:
+        trả_về Rỗng
+    cuối_cùng:
+        bỏ_qua
+
+
+lớp Accumulator:
+    hàm __init__(self):
+        self.total = 0
+
+    hàm add(self, amount):
+        self.total += amount
+
+    hàm get(self):
+        trả_về self.total
+
+
+lớp Section:
+    hàm __enter__(self):
+        trả_về self
+
+    hàm __exit__(self, exc_type, exc, traceback):
+        trả_về Sai
+
+
+hàm register(name):
+    toàn_cục registry
+    registry[name] = Đúng
+
+
+hàm outer():
+    count = 0
+
+    hàm inner():
+        phi_cục_bộ count
+        count += 1
+        trả_về count
+
+    trả_về inner
+
+
+bất_đồng_bộ hàm report(value):
+    chờ asyncio.sleep(0)
+    nếu value là Rỗng hoặc không value:
+        trả_về "empty"
+    nếu_không_thì value > 10 và value % 2 == 0:
+        trả_về "big even"
+    khác:
+        trả_về "other"
+
+
+hàm main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    với Section():
+        cho value trong evens(values):
+            acc.add(value)
+    double = lambda x: x * 2
+    squares = [double(v) cho v trong values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    xóa registry["fib"]
+    print("clean", "fib" không trong registry)
+
+
+nếu Đúng:
+    main()

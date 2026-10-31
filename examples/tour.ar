@@ -1,0 +1,115 @@
+استورد asyncio
+استورد math بصفة m
+من collections استورد Counter
+
+LIMIT = 30
+registry = {}
+
+
+دالة fib(limit):
+    a, b = 0, 1
+    values = []
+    بينما صحيح:
+        إذا a >= limit:
+            اكسر
+        values.append(a)
+        a, b = b, a + b
+    إرجاع values
+
+
+دالة evens(numbers):
+    لكل number في numbers:
+        إذا number % 2:
+            تابع
+        أنتج number
+
+
+دالة must_be_positive(value):
+    إذا value <= 0:
+        ارفع ValueError("not positive")
+    إرجاع value
+
+
+دالة safe_div(a, b):
+    حاول:
+        أكد b != 0
+        إرجاع a / b
+    التقط AssertionError:
+        إرجاع لا_شيء
+    أخيرا:
+        مرر
+
+
+صنف Accumulator:
+    دالة __init__(self):
+        self.total = 0
+
+    دالة add(self, amount):
+        self.total += amount
+
+    دالة get(self):
+        إرجاع self.total
+
+
+صنف Section:
+    دالة __enter__(self):
+        إرجاع self
+
+    دالة __exit__(self, exc_type, exc, traceback):
+        إرجاع خطأ
+
+
+دالة register(name):
+    عام registry
+    registry[name] = صحيح
+
+
+دالة outer():
+    count = 0
+
+    دالة inner():
+        غير_محلي count
+        count += 1
+        إرجاع count
+
+    إرجاع inner
+
+
+غير_متزامن دالة report(value):
+    انتظر asyncio.sleep(0)
+    إذا value هو لا_شيء أو ليس value:
+        إرجاع "empty"
+    وإلا_إذا value > 10 و value % 2 == 0:
+        إرجاع "big even"
+    وإلا:
+        إرجاع "other"
+
+
+دالة main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    مع Section():
+        لكل value في evens(values):
+            acc.add(value)
+    double = لامبدا x: x * 2
+    squares = [double(v) لكل v في values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    احذف registry["fib"]
+    print("clean", "fib" ليس في registry)
+
+
+إذا صحيح:
+    main()

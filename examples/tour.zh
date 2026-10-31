@@ -1,0 +1,115 @@
+导入 asyncio
+导入 math 作为 m
+从 collections 导入 Counter
+
+LIMIT = 30
+registry = {}
+
+
+函数 fib(limit):
+    a, b = 0, 1
+    values = []
+    当 真:
+        如果 a >= limit:
+            跳出
+        values.append(a)
+        a, b = b, a + b
+    返回 values
+
+
+函数 evens(numbers):
+    对于 number 在 numbers:
+        如果 number % 2:
+            继续
+        产出 number
+
+
+函数 must_be_positive(value):
+    如果 value <= 0:
+        抛出 ValueError("not positive")
+    返回 value
+
+
+函数 safe_div(a, b):
+    尝试:
+        断言 b != 0
+        返回 a / b
+    捕获 AssertionError:
+        返回 空
+    最终:
+        跳过
+
+
+类 Accumulator:
+    函数 __init__(self):
+        self.total = 0
+
+    函数 add(self, amount):
+        self.total += amount
+
+    函数 get(self):
+        返回 self.total
+
+
+类 Section:
+    函数 __enter__(self):
+        返回 self
+
+    函数 __exit__(self, exc_type, exc, traceback):
+        返回 假
+
+
+函数 register(name):
+    全局 registry
+    registry[name] = 真
+
+
+函数 outer():
+    count = 0
+
+    函数 inner():
+        非局部 count
+        count += 1
+        返回 count
+
+    返回 inner
+
+
+异步 函数 report(value):
+    等待 asyncio.sleep(0)
+    如果 value 是 空 或者 不是 value:
+        返回 "empty"
+    否则如果 value > 10 并且 value % 2 == 0:
+        返回 "big even"
+    否则:
+        返回 "other"
+
+
+函数 main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    使用 Section():
+        对于 value 在 evens(values):
+            acc.add(value)
+    double = 匿名 x: x * 2
+    squares = [double(v) 对于 v 在 values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    删除 registry["fib"]
+    print("clean", "fib" 不是 在 registry)
+
+
+如果 真:
+    main()

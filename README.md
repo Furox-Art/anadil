@@ -56,6 +56,14 @@ polyglot-python translate examples/classify.tr -o classify.py
 
 The same FizzBuzz program is included for every locale under `examples/`.
 
+A broader `examples/tour.<code>` program exercises all 35 keywords — classes,
+exceptions, generators, closures, `with` and `async`/`await` — and prints the
+same result in every locale:
+
+```bash
+polyglot-python run examples/tour.tr
+```
+
 ## Locales
 
 | Code | Language   | `if`     | `def`       | `return`  |
@@ -138,7 +146,7 @@ python -m venv .venv
 .venv/Scripts/python -m pytest -q --cov=polyglot_python --cov-fail-under=100
 ```
 
-The suite contains 156 tests with 100% statement coverage, including every
+The suite contains 187 tests with 100% statement coverage, including every
 keyword in both directions for all 15 locales, end-to-end CLI runs of every
 example, version consistency with the changelog and the npm wrapper, and
 byte-level determinism checks. CI runs Ubuntu 3.12-3.14 plus Windows and macOS

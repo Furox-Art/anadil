@@ -1,0 +1,115 @@
+importieren asyncio
+importieren math als m
+von collections importieren Counter
+
+LIMIT = 30
+registry = {}
+
+
+funktion fib(limit):
+    a, b = 0, 1
+    values = []
+    solange Wahr:
+        wenn a >= limit:
+            abbrechen
+        values.append(a)
+        a, b = b, a + b
+    zurückgeben values
+
+
+funktion evens(numbers):
+    für number in numbers:
+        wenn number % 2:
+            fortsetzen
+        erzeugen number
+
+
+funktion must_be_positive(value):
+    wenn value <= 0:
+        auslösen ValueError("not positive")
+    zurückgeben value
+
+
+funktion safe_div(a, b):
+    versuchen:
+        behaupten b != 0
+        zurückgeben a / b
+    außer AssertionError:
+        zurückgeben Nichts
+    schließlich:
+        passieren
+
+
+klasse Accumulator:
+    funktion __init__(self):
+        self.total = 0
+
+    funktion add(self, amount):
+        self.total += amount
+
+    funktion get(self):
+        zurückgeben self.total
+
+
+klasse Section:
+    funktion __enter__(self):
+        zurückgeben self
+
+    funktion __exit__(self, exc_type, exc, traceback):
+        zurückgeben Falsch
+
+
+funktion register(name):
+    global registry
+    registry[name] = Wahr
+
+
+funktion outer():
+    count = 0
+
+    funktion inner():
+        nichtlokal count
+        count += 1
+        zurückgeben count
+
+    zurückgeben inner
+
+
+asynchron funktion report(value):
+    warten asyncio.sleep(0)
+    wenn value ist Nichts oder nicht value:
+        zurückgeben "empty"
+    sonst_wenn value > 10 und value % 2 == 0:
+        zurückgeben "big even"
+    sonst:
+        zurückgeben "other"
+
+
+funktion main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    mit Section():
+        für value in evens(values):
+            acc.add(value)
+    double = lambda x: x * 2
+    squares = [double(v) für v in values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    löschen registry["fib"]
+    print("clean", "fib" nicht in registry)
+
+
+wenn Wahr:
+    main()

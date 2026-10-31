@@ -1,0 +1,115 @@
+आयात asyncio
+आयात math के_रूप_में m
+से collections आयात Counter
+
+LIMIT = 30
+registry = {}
+
+
+फलन fib(limit):
+    a, b = 0, 1
+    values = []
+    जबकि सही:
+        अगर a >= limit:
+            तोड़ो
+        values.append(a)
+        a, b = b, a + b
+    लौटाओ values
+
+
+फलन evens(numbers):
+    के_लिए number में numbers:
+        अगर number % 2:
+            जारी_रखो
+        उत्पन्न number
+
+
+फलन must_be_positive(value):
+    अगर value <= 0:
+        उठाओ ValueError("not positive")
+    लौटाओ value
+
+
+फलन safe_div(a, b):
+    प्रयास:
+        दावा b != 0
+        लौटाओ a / b
+    पकड़ो AssertionError:
+        लौटाओ कुछ_नहीं
+    अंततः:
+        छोड़ो
+
+
+वर्ग Accumulator:
+    फलन __init__(self):
+        self.total = 0
+
+    फलन add(self, amount):
+        self.total += amount
+
+    फलन get(self):
+        लौटाओ self.total
+
+
+वर्ग Section:
+    फलन __enter__(self):
+        लौटाओ self
+
+    फलन __exit__(self, exc_type, exc, traceback):
+        लौटाओ गलत
+
+
+फलन register(name):
+    वैश्विक registry
+    registry[name] = सही
+
+
+फलन outer():
+    count = 0
+
+    फलन inner():
+        स्थानीय_नहीं count
+        count += 1
+        लौटाओ count
+
+    लौटाओ inner
+
+
+अतुल्यकालिक फलन report(value):
+    प्रतीक्षा asyncio.sleep(0)
+    अगर value है कुछ_नहीं या नहीं value:
+        लौटाओ "empty"
+    अन्यथा_अगर value > 10 और value % 2 == 0:
+        लौटाओ "big even"
+    अन्यथा:
+        लौटाओ "other"
+
+
+फलन main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    के_साथ Section():
+        के_लिए value में evens(values):
+            acc.add(value)
+    double = लैम्ब्डा x: x * 2
+    squares = [double(v) के_लिए v में values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    हटाओ registry["fib"]
+    print("clean", "fib" नहीं में registry)
+
+
+अगर सही:
+    main()

@@ -1,0 +1,115 @@
+içe_aktar asyncio
+içe_aktar math olarak m
+dan collections içe_aktar Counter
+
+LIMIT = 30
+registry = {}
+
+
+fonksiyon fib(limit):
+    a, b = 0, 1
+    values = []
+    iken Doğru:
+        eğer a >= limit:
+            kır
+        values.append(a)
+        a, b = b, a + b
+    döndür values
+
+
+fonksiyon evens(numbers):
+    için number içinde numbers:
+        eğer number % 2:
+            sürdür
+        üret number
+
+
+fonksiyon must_be_positive(value):
+    eğer value <= 0:
+        yükselt ValueError("not positive")
+    döndür value
+
+
+fonksiyon safe_div(a, b):
+    dene:
+        doğrula b != 0
+        döndür a / b
+    yakala AssertionError:
+        döndür Hiçbiri
+    sonunda:
+        geç
+
+
+sınıf Accumulator:
+    fonksiyon __init__(self):
+        self.total = 0
+
+    fonksiyon add(self, amount):
+        self.total += amount
+
+    fonksiyon get(self):
+        döndür self.total
+
+
+sınıf Section:
+    fonksiyon __enter__(self):
+        döndür self
+
+    fonksiyon __exit__(self, exc_type, exc, traceback):
+        döndür Yanlış
+
+
+fonksiyon register(name):
+    global registry
+    registry[name] = Doğru
+
+
+fonksiyon outer():
+    count = 0
+
+    fonksiyon inner():
+        dış count
+        count += 1
+        döndür count
+
+    döndür inner
+
+
+eşzamansız fonksiyon report(value):
+    bekle asyncio.sleep(0)
+    eğer value aynı Hiçbiri veya değil value:
+        döndür "empty"
+    değilse_eğer value > 10 ve value % 2 == 0:
+        döndür "big even"
+    değilse:
+        döndür "other"
+
+
+fonksiyon main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    ile Section():
+        için value içinde evens(values):
+            acc.add(value)
+    double = lambda x: x * 2
+    squares = [double(v) için v içinde values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    sil registry["fib"]
+    print("clean", "fib" değil içinde registry)
+
+
+eğer Doğru:
+    main()

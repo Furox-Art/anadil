@@ -11,6 +11,9 @@ All notable changes to this project are documented here. The format follows
 - Six locales: Italian (`it`), Dutch (`nl`), Polish (`pl`), Indonesian (`id`),
   Vietnamese (`vi`) and Japanese (`ja`), each with an `examples/classify.<code>`
   program.
+- A broader `examples/tour.<code>` program per locale that exercises all 35
+  keywords (classes, exceptions, generators, closures, `with`,
+  `async`/`await`) and is verified to translate back to a reference program.
 
 ## [0.2.1] - 2026-11-01
 

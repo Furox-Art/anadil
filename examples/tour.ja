@@ -1,0 +1,115 @@
+インポート asyncio
+インポート math として m
+から collections インポート Counter
+
+LIMIT = 30
+registry = {}
+
+
+関数 fib(limit):
+    a, b = 0, 1
+    values = []
+    間 真:
+        もし a >= limit:
+            中断
+        values.append(a)
+        a, b = b, a + b
+    返す values
+
+
+関数 evens(numbers):
+    各 number の中で numbers:
+        もし number % 2:
+            続行
+        生成 number
+
+
+関数 must_be_positive(value):
+    もし value <= 0:
+        送出 ValueError("not positive")
+    返す value
+
+
+関数 safe_div(a, b):
+    試す:
+        断言 b != 0
+        返す a / b
+    例外 AssertionError:
+        返す 無
+    最後に:
+        何もしない
+
+
+クラス Accumulator:
+    関数 __init__(self):
+        self.total = 0
+
+    関数 add(self, amount):
+        self.total += amount
+
+    関数 get(self):
+        返す self.total
+
+
+クラス Section:
+    関数 __enter__(self):
+        返す self
+
+    関数 __exit__(self, exc_type, exc, traceback):
+        返す 偽
+
+
+関数 register(name):
+    グローバル registry
+    registry[name] = 真
+
+
+関数 outer():
+    count = 0
+
+    関数 inner():
+        非ローカル count
+        count += 1
+        返す count
+
+    返す inner
+
+
+非同期 関数 report(value):
+    待機 asyncio.sleep(0)
+    もし value である 無 または ない value:
+        返す "empty"
+    そうでなくもし value > 10 かつ value % 2 == 0:
+        返す "big even"
+    そうでなければ:
+        返す "other"
+
+
+関数 main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    と共に Section():
+        各 value の中で evens(values):
+            acc.add(value)
+    double = 無名関数 x: x * 2
+    squares = [double(v) 各 v の中で values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    削除 registry["fib"]
+    print("clean", "fib" ない の中で registry)
+
+
+もし 真:
+    main()

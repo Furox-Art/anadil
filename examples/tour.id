@@ -1,0 +1,115 @@
+impor asyncio
+impor math sebagai m
+dari collections impor Counter
+
+LIMIT = 30
+registry = {}
+
+
+fungsi fib(limit):
+    a, b = 0, 1
+    values = []
+    selama Benar:
+        jika a >= limit:
+            hentikan
+        values.append(a)
+        a, b = b, a + b
+    kembalikan values
+
+
+fungsi evens(numbers):
+    untuk number dalam numbers:
+        jika number % 2:
+            lanjutkan
+        hasilkan number
+
+
+fungsi must_be_positive(value):
+    jika value <= 0:
+        lontarkan ValueError("not positive")
+    kembalikan value
+
+
+fungsi safe_div(a, b):
+    coba:
+        pastikan b != 0
+        kembalikan a / b
+    kecuali AssertionError:
+        kembalikan Kosong
+    akhirnya:
+        lewati
+
+
+kelas Accumulator:
+    fungsi __init__(self):
+        self.total = 0
+
+    fungsi add(self, amount):
+        self.total += amount
+
+    fungsi get(self):
+        kembalikan self.total
+
+
+kelas Section:
+    fungsi __enter__(self):
+        kembalikan self
+
+    fungsi __exit__(self, exc_type, exc, traceback):
+        kembalikan Salah
+
+
+fungsi register(name):
+    global registry
+    registry[name] = Benar
+
+
+fungsi outer():
+    count = 0
+
+    fungsi inner():
+        nonlokal count
+        count += 1
+        kembalikan count
+
+    kembalikan inner
+
+
+asinkron fungsi report(value):
+    tunggu asyncio.sleep(0)
+    jika value adalah Kosong atau tidak value:
+        kembalikan "empty"
+    selain_jika value > 10 dan value % 2 == 0:
+        kembalikan "big even"
+    selain:
+        kembalikan "other"
+
+
+fungsi main():
+    values = fib(LIMIT)
+    counter = Counter(values)
+    acc = Accumulator()
+    dengan Section():
+        untuk value dalam evens(values):
+            acc.add(value)
+    double = lambda x: x * 2
+    squares = [double(v) untuk v dalam values[:4]]
+    register("fib")
+    next_call = outer()
+    next_call()
+    print("fib", values)
+    print("even sum", acc.get())
+    print("squares", squares)
+    print("zero count", counter[0])
+    print("div", safe_div(9, 3))
+    print("root", int(m.sqrt(81)))
+    print("positive", must_be_positive(5))
+    print("report", asyncio.run(report(4)))
+    print("registry", registry["fib"])
+    print("calls", next_call())
+    hapus registry["fib"]
+    print("clean", "fib" tidak dalam registry)
+
+
+jika Benar:
+    main()
