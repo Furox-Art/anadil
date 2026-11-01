@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import builtins
 import keyword
 import os
 import sys
 import traceback
 import types
+from importlib.machinery import SourceFileLoader
 from types import CodeType
 from typing import Mapping, Sequence
 
@@ -115,6 +117,11 @@ def _run(namespace: argparse.Namespace) -> int:
 
     module = types.ModuleType("__main__")
     module.__file__ = os.path.abspath(namespace.file)
+    if sys.version_info < (3, 15):
+        # CPython 3.15 no longer sets __cached__ on modules.
+        module.__cached__ = None
+    module.__loader__ = SourceFileLoader("__main__", module.__file__)
+    module.__dict__["__builtins__"] = builtins
     script_dir = os.path.dirname(module.__file__)
     saved_main = sys.modules.get("__main__", _MISSING)
     saved_path = list(sys.path)
@@ -133,10 +140,10 @@ def _run(namespace: argparse.Namespace) -> int:
         return 1
     except KeyboardInterrupt:
         raise
-    except Exception:
+    except Exception as exc:
         prefix = _message(locale, "runtime_error", "Runtime error")
         print(f"{prefix}: {namespace.file}", file=sys.stderr)
-        traceback.print_exc()
+        traceback.print_exception(type(exc), exc, exc.__traceback__.tb_next)
         return 1
     finally:
         sys.argv = saved_argv
