@@ -106,6 +106,82 @@ def test_run_runtime_error_is_localized(tmp_path, capsys):
     assert "ZeroDivisionError" in error
 
 
+def test_run_traceback_matches_cpython_frames(tmp_path, capsys):
+    english_source = (
+        "def inner():\n"
+        "    return 1 / 0\n"
+        "\n"
+        "def outer():\n"
+        "    return inner()\n"
+        "\n"
+        "outer()\n"
+    )
+    localized_source = (
+        "fonksiyon inner():\n"
+        "    döndür 1 / 0\n"
+        "\n"
+        "fonksiyon outer():\n"
+        "    döndür inner()\n"
+        "\n"
+        "outer()\n"
+    )
+    english = _write(tmp_path, "boom.py", english_source)
+    localized = _write(tmp_path, "boom.tr", localized_source)
+    cpython = subprocess.run(
+        [sys.executable, str(english)],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    assert cpython.returncode == 1
+
+    def frames(text):
+        return [
+            line.strip().split('", ', 1)[1]
+            for line in text.splitlines()
+            if line.strip().startswith('File "')
+        ]
+
+    assert main(["run", str(localized)]) == 1
+    error = capsys.readouterr().err
+    assert frames(error) == frames(cpython.stderr)
+    assert "polyglot_python" not in error
+
+
+_METADATA_PROBE = (
+    "içe_aktar os, sys\n"
+    "\n"
+    'print("name", __name__)\n'
+    'print("package", __package__)\n'
+    'print("spec", __spec__)\n'
+    'print("cached", __cached__)\n'
+    'print("loader", type(__loader__).__name__)\n'
+    'print("loader_name", __loader__.name)\n'
+    'print("loader_file", __loader__.get_filename() == __file__)\n'
+    'print("builtins", type(__builtins__).__name__)\n'
+    'print("builtins_module", __builtins__ is sys.modules["builtins"])\n'
+    'print("file_absolute", os.path.isabs(__file__))\n'
+    'print("main_alias", sys.modules["__main__"] is sys.modules[__name__])\n'
+)
+
+
+def test_run_main_metadata_matches_cpython(tmp_path, capsys):
+    english_source = _METADATA_PROBE.replace("içe_aktar", "import")
+    english = _write(tmp_path, "meta.py", english_source)
+    localized = _write(tmp_path, "meta.tr", _METADATA_PROBE)
+    cpython = subprocess.run(
+        [sys.executable, str(english)],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    assert cpython.returncode == 0
+    assert main(["run", str(localized)]) == 0
+    assert capsys.readouterr().out == cpython.stdout
+
+
 def test_unknown_locale(tmp_path, capsys):
     path = _write(tmp_path, "program.txt", "print(1)\n")
     assert main(["run", "--lang", "xx", str(path)]) == 1

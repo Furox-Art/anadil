@@ -33,6 +33,10 @@ All notable changes to this project are documented here. The format follows
 - `run` now executes a program the way `python FILE` does: the script's
   directory leads `sys.path`, so sibling imports work, and the program is
   registered as the `__main__` module.
+- `run` no longer leaks the translator's internal frame into runtime
+  tracebacks, and the executed module carries CPython's `__loader__`,
+  `__cached__` and `__builtins__`, so programs that inspect themselves see the
+  same values as under `python FILE`.
 - A downstream pipe that closes early (for example `translate FILE | head`) no
   longer prints a traceback; the command exits quietly with status 1.
 
