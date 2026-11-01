@@ -35,8 +35,8 @@ All notable changes to this project are documented here. The format follows
   registered as the `__main__` module.
 - `run` no longer leaks the translator's internal frame into runtime
   tracebacks, and the executed module carries CPython's `__loader__`,
-  `__cached__` and `__builtins__`, so programs that inspect themselves see the
-  same values as under `python FILE`.
+  `__builtins__` and, before Python 3.15, `__cached__`, so programs that
+  inspect themselves see the same values as under `python FILE`.
 - A downstream pipe that closes early (for example `translate FILE | head`) no
   longer prints a traceback; the command exits quietly with status 1.
 

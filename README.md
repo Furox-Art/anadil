@@ -139,9 +139,9 @@ normally, and the program is registered as the `__main__` module.
 - Exit codes from the executed program are propagated.
 - `run` matches CPython's script behavior: the script's directory leads
   `sys.path` (so local imports work) and the program is the `__main__` module.
-- That module carries CPython's metadata (`__loader__`, `__cached__`,
-  `__builtins__`), and runtime tracebacks show only the program's own frames,
-  never the translator's internals.
+- That module carries CPython's metadata (`__loader__`, `__cached__` while the
+  interpreter still defines it, `__builtins__`), and runtime tracebacks show
+  only the program's own frames, never the translator's internals.
 - A downstream pipe that closes early (`translate FILE | head`) exits quietly
   with status 1 instead of printing a traceback.
 

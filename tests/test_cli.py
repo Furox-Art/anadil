@@ -155,7 +155,7 @@ _METADATA_PROBE = (
     'print("name", __name__)\n'
     'print("package", __package__)\n'
     'print("spec", __spec__)\n'
-    'print("cached", __cached__)\n'
+    'print("cached", __cached__ if "__cached__" in globals() else "<unset>")\n'
     'print("loader", type(__loader__).__name__)\n'
     'print("loader_name", __loader__.name)\n'
     'print("loader_file", __loader__.get_filename() == __file__)\n'
